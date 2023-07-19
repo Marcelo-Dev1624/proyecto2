@@ -8,8 +8,10 @@
         <title>Usuarios</title>
     </h:head>
     <h:body>
-        <h1> Lista de Colaboradores</h1>
-    <div class="card">
+        <p:commandButton value="Cerrar Sesion.." icon="pi pi-times" style="float:right;" actionListener="#{loginController.logoutSalir()}" process="@this"
+                         styleClass="ui-button-danger"/>
+        <h1> Lista de Colaboradores </h1> 
+        <div class="card">
             <p:tabMenu activeIndex="#{param.i}">
                 <p:menuitem value="Home" outcome="bienvenida" icon="pi pi-fw pi-home">
                     <f:param name="i" value="0"/>
@@ -37,16 +39,15 @@
 
             <p:commandButton value="Nuevo usuario" icon="pi pi-plus" actionListener="#{loginController.openNew}"
                              update=":form:manage-user-contentAgregar" oncomplete="PF('manageUserDialogAgregar').show()"
-                             rendered="#{loginController.usuario.rol eq 'admin'|| loginController.usuario.rol eq 'manager'}"
+                             rendered="#{loginController.usuario.rol eq 'Admin'|| loginController.usuario.rol eq 'Manager'}"
                              styleClass="ui-button-success" style="margin-right: .5rem">
                 <p:resetInput target=":form:manage-user-contentAgregar"/>
             </p:commandButton>
-            
-            <p:commandButton value="Cerrar Sesion.." icon="pi pi-times" actionListener="#{loginController.logoutSalir()}" process="@this"
-                             styleClass="ui-button-danger"/>
-        
-            
-            
+
+
+
+
+
             <div class="card">
                 <p:dataTable var="usuario" value="#{loginController.usuarios}" paginator="true" 
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -55,7 +56,7 @@
                     <p:column headerText="Correo" sortBy="#{usuario.correo}" filterBy="#{usuario.correo}" filterMatchMode="contains">
                         <h:outputText value="#{usuario.correo}" />
                     </p:column>
-                    <p:column headerText="Clave" sortBy="#{usuario.clave}" filterBy="#{usuario.clave}" filterMatchMode="contains">
+                    <p:column headerText="Clave" rendered="#{loginController.usuario.rol eq 'Admin'}"  sortBy="#{usuario.clave}" filterBy="#{usuario.clave}" filterMatchMode="contains">
                         <h:outputText value="#{usuario.clave}" />
                     </p:column>
                     <p:column headerText="Nombre" sortBy="#{usuario.nombre}" filterBy="#{usuario.nombre}" filterMatchMode="contains">
@@ -69,16 +70,15 @@
                         <h:outputText value="#{usuario.rol}" />
                     </p:column>
 
-                    <p:column headerText="Estado">
-                        <h:outputText value="#{usuario.estado}" />
+                    <p:column headerText="Manager" sortBy="#{usuario.manager}" filterBy="#{usuario.manager}" filterMatchMode="contains">
+                        <h:outputText value="#{usuario.manager}" />
                     </p:column>
-
                     <p:column>
-                        
+
                         <p:commandButton icon="pi pi-pencil"  update=":form:manage-user-contentEdit"
                                          oncomplete="PF('manageUserDialogEdit').show()"
                                          styleClass="edit-button rounded-button ui-button-success" 
-                                         rendered="#{loginController.usuario.rol eq 'admin'|| loginController.usuario.rol eq 'manager'}" process="@this">
+                                         rendered="#{loginController.usuario.rol eq 'Admin'}" process="@this">
                             <f:setPropertyActionListener value="#{usuario}"  target="#{loginController.selectedUsuario}"/>
                             <p:resetInput target=":form:manage-user-contentEdit"/>
 
@@ -86,7 +86,7 @@
 
                         <p:commandButton  icon="pi pi-times" update=":form:manage-user-contentDelete"
                                           oncomplete="PF('manageUserDialogDelete').show()" 
-                                          rendered="#{loginController.usuario.rol eq 'admin'|| loginController.usuario.rol eq 'manager'}"
+                                          rendered="#{loginController.usuario.rol eq 'Admin'|| loginController.usuario.rol eq 'anager'}"
                                           styleClass="rounded-button ui-button-danger" process="@this">
                             <f:setPropertyActionListener value="#{usuario}" target="#{loginController.selectedUsuario}"/>
                             <p:resetInput target=":form:manage-user-contentDelete"/>
@@ -126,12 +126,12 @@
                         </div>
                         <div class="p-field">
 
-                            <p:outputLabel for="role" value="Rol"/>
-                            <p:selectOneMenu id="role" required="true" value="#{loginController.selectedUsuario.rol}">
-                                <f:selectItem itemLabel="Seleccione Rol" itemDisabled="true" itemValue=""/>
-                                <f:selectItem itemLabel="admin" itemValue="admin"/>
-                                <f:selectItem itemLabel="manager" itemValue="manager"/>
-                                <f:selectItem itemLabel="colaborador" itemValue="colaborador"/>
+                            <p:outputLabel for="role"  rendered="#{loginController.usuario.rol eq 'Admin'}" value="Rol"/>
+                            <p:selectOneMenu id="role" required="true"  rendered="#{loginController.usuario.rol eq 'Admin'}" 
+                                             value="#{loginController.selectedUsuario.rol}">
+                                <f:selectItem itemLabel="Admin" itemValue="Admin"/>
+                                <f:selectItem itemLabel="Manager" itemValue="Manager"/>
+                                <f:selectItem itemLabel="Colaborador" itemValue="Colaborador"/>
                                 <f:facet name="footer">
                                     <p:divider styleClass="mt-0" />
                                     <h:outputText value="3 options" style="font-weight:bold;"/>
@@ -191,9 +191,9 @@
                             <p:outputLabel for="role2" value="Rol"/>
                             <p:selectOneMenu id="role2" required="true" value="#{loginController.selectedUsuario.rol}">
                                 <f:selectItem itemLabel="Seleccione Rol" itemDisabled="true" itemValue=""/>
-                                <f:selectItem itemLabel="admin" itemValue="admin"/>
-                                <f:selectItem itemLabel="manager" itemValue="manager"/>
-                                <f:selectItem itemLabel="colaborador" itemValue="colaborador"/>
+                                <f:selectItem itemLabel="Admin" itemValue="Admin"/>
+                                <f:selectItem itemLabel="Manager" itemValue="Manager"/>
+                                <f:selectItem itemLabel="Colaborador" itemValue="Colaborador"/>
                                 <f:facet name="footer">
                                     <p:divider styleClass="mt-0" />
                                     <h:outputText value="3 options" style="font-weight:bold;"/>
