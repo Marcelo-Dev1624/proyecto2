@@ -2,20 +2,10 @@
 import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import com.mycompany.demobd.DemoBD;
-import com.mycompany.demobd.ICrud;
 import com.mycompany.demobd.PermisoTO;
-import com.mycompany.demobd.Servicio;
+import com.mycompany.demobd.ServicioPermiso;
 import com.mycompany.demobd.ServicioUsuario;
-import com.mycompany.demobd.TesterServicio;
 import com.mycompany.demobd.UsuarioTO;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -25,8 +15,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import org.primefaces.PrimeFaces;
-import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.file.UploadedFile;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -47,6 +35,7 @@ public class LoginController implements Serializable {
     private String apellidos;
     private String estado;
     private String rol;
+    private String manager;
     private List<UsuarioTO> usuarios;
     private UsuarioTO usuario;
     private ServicioUsuario su;
@@ -60,8 +49,8 @@ public class LoginController implements Serializable {
     private String receptor;
     private String estadoTicket;
     private List<PermisoTO> permisos;
+    private List<PermisoTO> permisosResueltos;
     private PermisoTO selectedPermiso = new PermisoTO();
-    private Object originalImageFile;
 
     public void insertar() {
 
@@ -89,14 +78,20 @@ public class LoginController implements Serializable {
     public void mostrarUsuarios() {
         try {
             ServicioUsuario su = new ServicioUsuario();
-            this.usuarios = new ServicioUsuario().demeUsuarios();
-
-            if (this.usuario.getCorreo().equals("admin")) {
-                ServicioPermiso sp = new ServicioPermiso();
+            ServicioPermiso sp = new ServicioPermiso();
+            this.usuarios = null;
+            this.permisos = null;
+            this.permisosResueltos = null;
+            if (this.usuario.getRol().equals("Admin")) {
+                this.usuarios = new ServicioUsuario().demeUsuariosAdmin();
+                this.permisos = new ServicioPermiso().demePermisos();
+                this.permisosResueltos = new ServicioPermiso().demePermisosResueltos(this.usuario.getCorreo());
+            } else if (this.usuario.getRol().equals("Manager")) {
+                this.usuarios = new ServicioUsuario().demeUsuariosManager(this.usuario.getCorreo());
                 this.permisos = new ServicioPermiso().demePermisosReceptor(this.usuario.getCorreo());
-
+                this.permisosResueltos = new ServicioPermiso().demePermisosResueltos(this.usuario.getCorreo());
             } else {
-                System.out.println(this.usuario.getCorreo());
+                this.usuarios = new ServicioUsuario().demeUsuariosColaborador(this.usuario.getManager());
                 this.permisos = new ServicioPermiso().demePermisosRemitente(this.usuario.getCorreo());
             }
         } catch (Exception e) {
@@ -114,14 +109,27 @@ public class LoginController implements Serializable {
         }
     }
 
+    public void logoutSalir() {
+        this.redireccionar("/faces/index.xhtml");
+        this.usuario = null;
+    }
+
+    public void permisosResueltosAbrir() {
+        this.redireccionar("/faces/permisosResueltos.xhtml");
+    }
+
+    public void permisosResueltosSalir() {
+        this.redireccionar("/faces/permisos.xhtml");
+    }
+
     public UsuarioTO validacionUsuario() {
 
-        UsuarioTO retorne = new UsuarioTO(this.correo, this.clave, this.rol);
+        UsuarioTO retorne = new UsuarioTO(this.correo, this.clave, this.rol, this.manager);
 
         try {
 
             ServicioUsuario su = new ServicioUsuario();
-            retorne = su.demeUsuario(correo, clave, rol);
+            retorne = su.demeUsuario(correo, clave, rol, manager);
             usuario = retorne;
 
             if (retorne != null) {
@@ -143,49 +151,17 @@ public class LoginController implements Serializable {
 
     }
 
-    public void logoutSalir() {
-        
-        
-        
-        try {
-            
-            this.redireccionar("/faces/index.xhtml");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void saveUser() {
 
         try {
             ServicioUsuario su = new ServicioUsuario();
-
+            selectedUsuario.setManager(this.usuario.getCorreo());
             su.insertar(selectedUsuario);
             this.usuarios.add(selectedUsuario);//para simular       
 
             this.esNuevo = false;
             this.selectedUsuario = new UsuarioTO();
             PrimeFaces.current().executeScript("PF('manageUserDialogAgregar').hide()");
-            mostrarUsuarios();
-        } catch (Exception ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Nuevo Usuario", "Nuevo Usuario Agregado Correctamente"));
-        //---this.servicioUsuario.listarUsuarios();
-
-    }
-
-    public void savePermiso() {
-
-        try {
-            ServicioPermiso sp = new ServicioPermiso();
-            selectedPermiso.setRemitente(this.usuario.getCorreo());
-            sp.insertar(selectedPermiso);
-            this.permisos.add(selectedPermiso);//para simular       
-
-            this.esNuevo = false;
-            this.selectedPermiso = new PermisoTO();
-            PrimeFaces.current().executeScript("PF('manageUserDialogAgregarPermiso').hide()");
             mostrarUsuarios();
         } catch (Exception ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
@@ -207,6 +183,47 @@ public class LoginController implements Serializable {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario Editado", "Usuario Editado Correctamente"));
+
+    }
+
+    public void deleteUser() {
+        System.out.println("Estoy eliminando al usuario");
+        try {
+            ServicioUsuario su = new ServicioUsuario();
+            su.eliminar(selectedUsuario);
+            mostrarUsuarios();
+        } catch (Exception ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario Eliminado", "Usuario Eliminado Correctamente"));
+
+    }
+
+    public void openNew() {
+        this.esNuevo = true;
+        this.selectedUsuario = new UsuarioTO();
+
+        this.selectedPermiso = new PermisoTO();
+    }
+
+    public void savePermiso() {
+
+        try {
+            ServicioPermiso sp = new ServicioPermiso();
+            selectedPermiso.setRemitente(this.usuario.getCorreo());
+            selectedPermiso.setReceptor(this.usuario.getManager());
+            sp.insertar(selectedPermiso);
+            this.permisos.add(selectedPermiso);//para simular       
+
+            this.esNuevo = false;
+            this.selectedPermiso = new PermisoTO();
+            PrimeFaces.current().executeScript("PF('manageUserDialogAgregarPermiso').hide()");
+            mostrarUsuarios();
+        } catch (Exception ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Nuevo Permiso", "Nuevo Permiso Agregado Correctamente"));
+        //---this.servicioUsuario.listarUsuarios();
 
     }
 
@@ -238,26 +255,6 @@ public class LoginController implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Permiso Rechazado", "Permiso Rechazado Correctamente"));
 
-    }
-
-    public void deleteUser() {
-        System.out.println("Estoy eliminando al usuario");
-        try {
-            ServicioUsuario su = new ServicioUsuario();
-            su.eliminar(selectedUsuario);
-            mostrarUsuarios();
-        } catch (Exception ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario Eliminado", "Usuario Eliminado Correctamente"));
-
-    }
-
-    public void openNew() {
-        this.esNuevo = true;
-        this.selectedUsuario = new UsuarioTO();
-
-        this.selectedPermiso = new PermisoTO();
     }
 
     public LoginController() {
@@ -429,4 +426,19 @@ public class LoginController implements Serializable {
         this.selectedPermiso = selectedPermiso;
     }
 
+    public String getManager() {
+        return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
+    }
+
+    public List<PermisoTO> getPermisosResueltos() {
+        return permisosResueltos;
+    }
+
+    public void setPermisosResueltos(List<PermisoTO> permisosResueltos) {
+        this.permisosResueltos = permisosResueltos;
+    }
 }
