@@ -1,0 +1,9 @@
+BackEndProyect/src/com/mycompany/demobd/Servicio.java
+
+**/nbproject/private/
+target/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/

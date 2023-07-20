@@ -8,6 +8,8 @@
         <title>Home</title>
     </h:head>
     <h:body>
+        <p:commandButton value="Cerrar Sesion.." icon="pi pi-times" style="float:right;" actionListener="#{loginController.logoutSalir()}" process="@this"
+                         styleClass="ui-button-danger"/>
         <h1> Home page</h1>
         <div class="card">
             <p:tabMenu activeIndex="#{param.i}">
@@ -33,7 +35,6 @@
         </div>
         <br/>
          <h:form id="form2"> 
-            <p:commandButton value="Cerrar Sesion.." icon="pi pi-times" styleClass="ui-button-danger" actionListener="#{loginController.logoutSalir()}"/>
          
          </h:form>
     </h:body>
