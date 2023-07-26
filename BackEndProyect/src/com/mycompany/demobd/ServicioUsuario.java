@@ -5,6 +5,7 @@
 package com.mycompany.demobd;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +24,7 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
         Connection conn = super.getConection();
         try {
 
-            ps = super.getConection().prepareStatement("INSERT INTO usuario VALUES(?,?,?,?,?,?,?)");
+            ps = super.getConection().prepareStatement("INSERT INTO usuario VALUES(?,?,?,?,?,?,?,?)");
             ps.setString(1, usuarioTO.getCorreo());
             ps.setString(2, usuarioTO.getClave());
             ps.setString(3, usuarioTO.getNombre());
@@ -35,6 +36,7 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
                 ps.setString(6, usuarioTO.getRol());
             }
             ps.setString(7, usuarioTO.getManager());
+            ps.setString(8, usuarioTO.getFechaInicio().toString());
             ps.executeUpdate();
 
         } catch (Exception e) {
@@ -109,8 +111,8 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
 
         List<UsuarioTO> retorno = new ArrayList<UsuarioTO>();
         try {
-            ps = getConection().prepareStatement("(SELECT correo,nombre,apellido,rol,manager FROM USUARIO WHERE ESTADO='ACTIVO' and manager = ?)  UNION\n"
-                    + " (SELECT correo,nombre,apellido,rol,manager FROM USUARIO WHERE Correo = ?)");
+            ps = getConection().prepareStatement("(SELECT correo,nombre,apellido,rol,manager,fechaInicio FROM USUARIO WHERE ESTADO='ACTIVO' and manager = ?)  UNION\n"
+                    + " (SELECT correo,nombre,apellido,rol,manager,fechaInicio FROM USUARIO WHERE Correo = ?)");
             ps.setString(1, man);
             ps.setString(2, man);
             rs = ps.executeQuery();
@@ -122,7 +124,8 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
                 String apellido = rs.getString("apellido");
                 String rol = rs.getString("rol");
                 String manager = rs.getString("manager");
-                UsuarioTO usuarioTO = new UsuarioTO(correo, nombre, apellido, rol, manager);
+                Date fechaInicio = rs.getDate("fechaInicio");
+                UsuarioTO usuarioTO = new UsuarioTO(correo, nombre, apellido, rol, manager, fechaInicio );
                 retorno.add(usuarioTO);
             }
         } catch (Exception e) {
@@ -144,7 +147,7 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
 
         List<UsuarioTO> retorno = new ArrayList<UsuarioTO>();
         try {
-            ps = getConection().prepareStatement("SELECT correo,nombre,apellido,rol,manager FROM USUARIO WHERE ESTADO='ACTIVO' and manager = ?");
+            ps = getConection().prepareStatement("SELECT correo,nombre,apellido,rol,manager,fechaInicio FROM USUARIO WHERE ESTADO='ACTIVO' and manager = ?");
             ps.setString(1, man);
 
             rs = ps.executeQuery();
@@ -156,7 +159,8 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
                 String apellido = rs.getString("apellido");
                 String rol = rs.getString("rol");
                 String manager = rs.getString("manager");
-                UsuarioTO usuarioTO = new UsuarioTO(correo, nombre, apellido, rol, manager);
+                Date fechaInicio = rs.getDate("fechaInicio");
+                UsuarioTO usuarioTO = new UsuarioTO(correo, nombre, apellido, rol, manager, fechaInicio);
                 retorno.add(usuarioTO);
             }
         } catch (Exception e) {
@@ -178,7 +182,7 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
 
         List<UsuarioTO> retorno = new ArrayList<UsuarioTO>();
         try {
-            ps = getConection().prepareStatement("SELECT correo,clave,nombre,apellido,rol,manager FROM USUARIO WHERE ESTADO='ACTIVO'");
+            ps = getConection().prepareStatement("SELECT correo,clave,nombre,apellido,rol,manager,fechaInicio FROM USUARIO WHERE ESTADO='ACTIVO'");
 
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -189,7 +193,8 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
                 String apellido = rs.getString("apellido");
                 String rol = rs.getString("rol");
                 String manager = rs.getString("manager");
-                UsuarioTO usuarioTO = new UsuarioTO(correo, clave, nombre, apellido, rol, manager);
+                Date fechaInicio = rs.getDate("fechaInicio");
+                UsuarioTO usuarioTO = new UsuarioTO(correo, clave, nombre, apellido, rol, manager,fechaInicio);
                 retorno.add(usuarioTO);
             }
         } catch (Exception e) {
@@ -231,7 +236,7 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
         return retorno;
 
     }*/
-    public UsuarioTO demeUsuario(String correo, String clave, String rol, String manager) throws SQLException, Exception {
+    public UsuarioTO demeUsuario(String correo, String clave, String rol, String manager, Date fechaInicio) throws SQLException, Exception {
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -239,7 +244,7 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
 
         UsuarioTO retorno = null;
         try {
-            ps = getConection().prepareStatement("SELECT correo,clave,rol,manager FROM USUARIO WHERE correo = ? and clave = ?");
+            ps = getConection().prepareStatement("SELECT correo,clave,rol,manager,fechaInicio FROM USUARIO WHERE correo = ? and clave = ?");
             ps.setString(1, correo);
             ps.setString(2, clave);
             rs = ps.executeQuery();
@@ -249,7 +254,8 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
                 clave = rs.getString("clave");
                 rol = rs.getString("rol");
                 manager = rs.getString("manager");
-                retorno = new UsuarioTO(correo, clave, rol, manager);
+                fechaInicio = rs.getDate("fechaInicio");
+                retorno = new UsuarioTO(correo, clave, rol, manager, fechaInicio);
 
             }
         } catch (Exception e) {

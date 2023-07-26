@@ -6,6 +6,7 @@ import com.mycompany.demobd.PermisoTO;
 import com.mycompany.demobd.ServicioPermiso;
 import com.mycompany.demobd.ServicioUsuario;
 import com.mycompany.demobd.UsuarioTO;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,6 +37,7 @@ public class LoginController implements Serializable {
     private String estado;
     private String rol;
     private String manager;
+    private Date fechaInicio;
     private List<UsuarioTO> usuarios;
     private UsuarioTO usuario;
     private ServicioUsuario su;
@@ -124,12 +126,12 @@ public class LoginController implements Serializable {
 
     public UsuarioTO validacionUsuario() {
 
-        UsuarioTO retorne = new UsuarioTO(this.correo, this.clave, this.rol, this.manager);
+        UsuarioTO retorne = new UsuarioTO(this.correo, this.clave, this.rol, this.manager, this.fechaInicio);
 
         try {
 
             ServicioUsuario su = new ServicioUsuario();
-            retorne = su.demeUsuario(correo, clave, rol, manager);
+            retorne = su.demeUsuario(correo, clave, rol, manager, fechaInicio);
             usuario = retorne;
 
             if (retorne != null) {

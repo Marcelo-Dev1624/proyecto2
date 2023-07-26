@@ -224,4 +224,8 @@ public class ServicioPermiso extends Servicio implements ICrud<PermisoTO> {
             super.cerrar(conn);
         }
     }
+
+    public void insertar(Object selectedVacacion) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
