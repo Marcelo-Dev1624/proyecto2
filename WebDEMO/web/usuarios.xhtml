@@ -73,6 +73,10 @@
                     <p:column headerText="Manager" sortBy="#{usuario.manager}" filterBy="#{usuario.manager}" filterMatchMode="contains">
                         <h:outputText value="#{usuario.manager}" />
                     </p:column>
+                    
+                    <p:column headerText="Fecha de Inicio" sortBy="#{usuario.fechaInicio}" filterBy="#{usuario.fechaInicio}" filterMatchMode="contains">
+                        <h:outputText value="#{usuario.fechaInicio}" />
+                    </p:column>
                     <p:column>
 
                         <p:commandButton icon="pi pi-pencil"  update=":form:manage-user-contentEdit"

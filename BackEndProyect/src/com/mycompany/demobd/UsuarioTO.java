@@ -5,6 +5,7 @@
 package com.mycompany.demobd;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 /**
  *
@@ -19,25 +20,40 @@ public class UsuarioTO implements Serializable {
     private String estado;
     private String rol;
     private String manager;
+    private Date fechaInicio;
 
     public UsuarioTO() {
     }
 
-    public UsuarioTO(String correo, String clave,String rol,String manager) {
+    public UsuarioTO(String correo, String clave,String rol,String manager, Date fechaInicio) {
         this.correo = correo;
         this.clave = clave;
         this.rol = rol;
         this.manager = manager;
+        this.fechaInicio = fechaInicio;
+    }
+
+    UsuarioTO(String correo, String clave, String rol, String manager) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
     
 
-    public UsuarioTO(String correo, String nombre, String apellido,String rol,String manager) {
+    public UsuarioTO(String correo, String nombre, String apellido,String rol,String manager, Date fechaInicio) {
         this.correo = correo;
         
         this.nombre = nombre;
         this.apellido = apellido;
         this.rol = rol;
         this.manager = manager;
+        this.fechaInicio = fechaInicio;
     }
     
 
@@ -48,7 +64,7 @@ public class UsuarioTO implements Serializable {
         this.estado = estado;
     }*/
 
-    public UsuarioTO(String correo, String clave, String nombre, String apellido, String rol, String manager) {
+    public UsuarioTO(String correo, String clave, String nombre, String apellido, String rol, String manager,Date fechaInicio) {
         this.correo = correo;
         this.clave = clave;
         this.nombre = nombre;
@@ -56,6 +72,7 @@ public class UsuarioTO implements Serializable {
         
         this.rol = rol;
         this.manager = manager;
+        this.fechaInicio = fechaInicio;
     }
     
 
