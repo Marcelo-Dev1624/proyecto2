@@ -20,6 +20,12 @@ public class DemoBD {
 
     public static void main(String[] args) {
         try {
+            
+            proyectosActividadesTO po = new proyectosActividadesTO(2, "admin", "Tomar", 1);
+            
+            servicioProyectosActividades spa = new servicioProyectosActividades();
+            spa.insertar(po);
+            
             //UsuarioTO usuarioTO_1 = new UsuarioTO("test", "Jose Andres","admin");
             //insertar(usuarioTO_1);
 
@@ -30,11 +36,11 @@ public class DemoBD {
 
             //usuarioTO_1 = new UsuarioTO(5, "Carlos");
             //eliminar(usuarioTO_1);
-            List<UsuarioTO> listaRetorno = demeUsuarios();
+            /*List<UsuarioTO> listaRetorno = demeUsuarios();
             for (UsuarioTO usuarioTO : listaRetorno) {
                 System.out.println("ID: " + usuarioTO.getCorreo() + " Nombre: " + usuarioTO.getClave());
             }
-
+*/
         //    System.out.println("Este es el nombre: " + demeUsuario().getNombre());
 
         } catch (Exception e) {

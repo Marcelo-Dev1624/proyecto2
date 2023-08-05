@@ -54,27 +54,7 @@ public class VacacionesController implements Serializable{
     private Object selectedVacacion;
 
 
-    public void savePermiso() {
-
-        try {
-            ServicioPermiso sp = new ServicioPermiso();
-            selectedVacacion.setRemitente(this.usuario.getCorreo());
-            selectedVacacion.setReceptor(this.usuario.getManager());
-            sp.insertar(selectedVacacion);
-            this.vacaciones.add((VacacionesTO) selectedVacacion);//para simular       
-
-            this.esNuevo = false;
-            this.selectedPermiso = new PermisoTO();
-            PrimeFaces.current().executeScript("PF('manageUserDialogAgregarPermiso').hide()");
-            mostrarUsuarios();
-        } catch (Exception ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Nuevo Permiso", "Nuevo Permiso Agregado Correctamente"));
-        //---this.servicioUsuario.listarUsuarios();
-
-    }
-
+   
     public void setCorreo(String correo) {
         this.correo = correo;
     }
