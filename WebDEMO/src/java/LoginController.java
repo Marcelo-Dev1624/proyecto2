@@ -6,7 +6,11 @@ import com.mycompany.demobd.PermisoTO;
 import com.mycompany.demobd.ServicioPermiso;
 import com.mycompany.demobd.ServicioUsuario;
 import com.mycompany.demobd.UsuarioTO;
+import com.mycompany.demobd.VacacionesTO;
+import com.mycompany.demobd.ServicioVacaciones;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,11 +37,11 @@ public class LoginController implements Serializable {
     private String correo;
     private String clave;
     private String nombre;
-    private String apellidos;
+    private String apellido;
     private String estado;
     private String rol;
     private String manager;
-    private Date fechaInicio;
+    private LocalDate fechaInicio;
     private List<UsuarioTO> usuarios;
     private UsuarioTO usuario;
     private ServicioUsuario su;
@@ -53,6 +57,12 @@ public class LoginController implements Serializable {
     private List<PermisoTO> permisos;
     private List<PermisoTO> permisosResueltos;
     private PermisoTO selectedPermiso = new PermisoTO();
+
+    private LocalDate fechaFinal;
+    private int diasVacaciones;
+    private List<VacacionesTO> vacaciones;
+    private VacacionesTO selectedVacacion = new VacacionesTO();
+    private long diasConcedidos;
 
     public void insertar() {
 
@@ -126,14 +136,14 @@ public class LoginController implements Serializable {
 
     public UsuarioTO validacionUsuario() {
 
-        UsuarioTO retorne = new UsuarioTO(this.correo, this.clave, this.rol, this.manager, this.fechaInicio);
+        UsuarioTO retorne = new UsuarioTO(this.correo, this.clave, this.nombre, this.apellido, this.rol,this.manager, this.fechaInicio,this.diasVacaciones);
 
         try {
 
             ServicioUsuario su = new ServicioUsuario();
-            retorne = su.demeUsuario(correo, clave, rol, manager, fechaInicio);
+            retorne = su.demeUsuario(correo, clave);
             usuario = retorne;
-
+            
             if (retorne != null) {
                 mostrarUsuarios();
                 this.redireccionar("/faces/bienvenida.xhtml");
@@ -258,6 +268,9 @@ public class LoginController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Permiso Rechazado", "Permiso Rechazado Correctamente"));
 
     }
+    
+    
+
 
     public LoginController() {
     }
@@ -268,10 +281,10 @@ public class LoginController implements Serializable {
         this.rol = rol;
     }
 
-    public LoginController(String correo, String nombre, String apellidos, String estado, ArrayList<UsuarioTO> usuarios) {
+    public LoginController(String correo, String nombre, String apellido, String estado, ArrayList<UsuarioTO> usuarios) {
         this.correo = correo;
         this.nombre = nombre;
-        this.apellidos = apellidos;
+        this.apellido = apellido;
         this.estado = estado;
         this.usuarios = usuarios;
     }
@@ -284,12 +297,12 @@ public class LoginController implements Serializable {
         this.nombre = nombre;
     }
 
-    public String getApellidos() {
-        return apellidos;
+    public String getApellido() {
+        return apellido;
     }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public void setApellido(String apellidos) {
+        this.apellido = apellidos;
     }
 
     public String getEstado() {
@@ -443,4 +456,45 @@ public class LoginController implements Serializable {
     public void setPermisosResueltos(List<PermisoTO> permisosResueltos) {
         this.permisosResueltos = permisosResueltos;
     }
+
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public LocalDate getFechaFinal() {
+        return fechaFinal;
+    }
+
+    public void setFechaFinal(LocalDate fechaFinal) {
+        this.fechaFinal = fechaFinal;
+    }
+
+    public int getDiasVacaciones() {
+        return diasVacaciones;
+    }
+
+    public void setDiasVacaciones(int diasVacaciones) {
+        this.diasVacaciones = diasVacaciones;
+    }
+
+    public List<VacacionesTO> getVacaciones() {
+        return vacaciones;
+    }
+
+    public void setVacaciones(List<VacacionesTO> vacaciones) {
+        this.vacaciones = vacaciones;
+    }
+
+    public VacacionesTO getSelectedVacacion() {
+        return selectedVacacion;
+    }
+
+    public void setSelectedVacacion(VacacionesTO selectedVacacion) {
+        this.selectedVacacion = selectedVacacion;
+    }
+    
 }

@@ -6,6 +6,7 @@ package com.mycompany.demobd;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  *
@@ -20,42 +21,35 @@ public class UsuarioTO implements Serializable {
     private String estado;
     private String rol;
     private String manager;
-    private Date fechaInicio;
+    private LocalDate fechaInicio;
+    private int diasVacaciones;
+
+    
 
     public UsuarioTO() {
     }
 
-    public UsuarioTO(String correo, String clave,String rol,String manager, Date fechaInicio) {
+    public UsuarioTO(String correo, String clave, String rol, String manager) {
         this.correo = correo;
         this.clave = clave;
         this.rol = rol;
         this.manager = manager;
-        this.fechaInicio = fechaInicio;
+       
     }
 
-    UsuarioTO(String correo, String clave, String rol, String manager) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Date getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public void setFechaInicio(Date fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
     
 
-    public UsuarioTO(String correo, String nombre, String apellido,String rol,String manager, Date fechaInicio) {
+    public UsuarioTO(String correo, String nombre, String apellido, String rol, String manager, LocalDate fechaInicio, int diasVacaciones) {
         this.correo = correo;
-        
+
         this.nombre = nombre;
         this.apellido = apellido;
         this.rol = rol;
         this.manager = manager;
         this.fechaInicio = fechaInicio;
+        this.diasVacaciones = diasVacaciones;
     }
-    
+
 
     /*public UsuarioTO(String correo, String nombre, String apellido, String estado) {
         this.correo = correo;
@@ -63,18 +57,35 @@ public class UsuarioTO implements Serializable {
         this.apellido = apellido;
         this.estado = estado;
     }*/
-
-    public UsuarioTO(String correo, String clave, String nombre, String apellido, String rol, String manager,Date fechaInicio) {
+    public UsuarioTO(String correo, String clave, String nombre, String apellido, String rol, String manager, LocalDate fechaInicio,int diasVacaciones) {
         this.correo = correo;
         this.clave = clave;
         this.nombre = nombre;
         this.apellido = apellido;
-        
+
         this.rol = rol;
         this.manager = manager;
         this.fechaInicio = fechaInicio;
+        this.diasVacaciones = diasVacaciones;
     }
-    
+
+    public UsuarioTO(String correo, String clave, String rol, String manager, int diasVacaciones) {
+        this.correo = correo;
+        this.clave = clave;
+        this.rol = rol;
+        this.manager = manager;
+        this.diasVacaciones = diasVacaciones;
+    }
+
+   
+
+    public UsuarioTO(String correo, String nombre, String apellido, String rol, String manager) {
+        this.correo = correo;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.rol = rol;
+        this.manager = manager;
+    }
 
     public String getCorreo() {
         return correo;
@@ -130,6 +141,22 @@ public class UsuarioTO implements Serializable {
 
     public void setManager(String manager) {
         this.manager = manager;
+    }
+
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public int getDiasVacaiones() {
+        return diasVacaciones;
+    }
+
+    public void setDiasVacaiones(int diasVacaiones) {
+        this.diasVacaciones = diasVacaiones;
     }
 
 }
