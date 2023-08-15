@@ -7,73 +7,52 @@ package com.mycompany.demobd;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  *
  * @author Brenda
  */
-public class VacacionesTO implements Serializable {
-    private int numVacacion;
-    private Date fechaInicio;
-    private Date fechaActual;
-    private String remitente;
+public class VacacionesTO extends PermisoTO implements Serializable {
+
+    private LocalDate fechaInicio;
+    private LocalDate fechaFinal;
     private int diasVacaciones;
-    
-    public VacacionesTO(){
 
-}
+    public VacacionesTO() {
 
-    public VacacionesTO(int numVacacion, Date fechaInicio, Date fechaActual, String remitente, int diasVacaciones) {
-        this.numVacacion = numVacacion;
+    }
+
+    public VacacionesTO(LocalDate fechaInicio, LocalDate fechaFinal, int diasVacaciones, int numTicket, String tipo, String motivo, String remitente, String receptor, String estado) {
+        super(numTicket, tipo, motivo, remitente, receptor, estado);
         this.fechaInicio = fechaInicio;
-        this.fechaActual = fechaActual;
-        this.remitente = remitente;
+        this.fechaFinal = fechaFinal;
         this.diasVacaciones = diasVacaciones;
     }
 
-    public int getNumVacacion() {
-        return numVacacion;
-    }
-
-    public Date getFechaInicio() {
+    public LocalDate getFechaInicio() {
         return fechaInicio;
     }
 
-    public Date getFechaActual() {
-        return fechaActual;
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 
-    public String getRemitente() {
-        return remitente;
+    public LocalDate getFechaFinal() {
+        return fechaFinal;
+    }
+
+    public void setFechaFinal(LocalDate fechaFinal) {
+        this.fechaFinal = fechaFinal;
     }
 
     public int getDiasVacaciones() {
         return diasVacaciones;
     }
 
-    public void setNumVacacion(int numVacacion) {
-        this.numVacacion = numVacacion;
-    }
-
-    public void setFechaInicio(Date fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
-
-    public void setFechaActual(Date fechaActual) {
-        this.fechaActual = fechaActual;
-    }
-
-    public void setRemitente(String remitente) {
-        this.remitente = remitente;
-    }
-
     public void setDiasVacaciones(int diasVacaciones) {
         this.diasVacaciones = diasVacaciones;
     }
-    
-    
+
     
 }
-
-
-

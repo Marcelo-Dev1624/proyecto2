@@ -37,8 +37,95 @@
             </p:tabMenu>
 
         </div>
+<<<<<<< HEAD
         <br/>
         Hello from Facelets
     </h:body>
+=======
+<h:form id="form">       
+        <div class="card">
+            
+            <h1 style="margin-top:0">Perfil de Usuario</h1>
+            
+            <p:panelGrid columns="2">
+                
+                <f:facet name="header">
+                    <p:graphicImage name="C:\Users\Kari\Downloads\Imagen_perfil.jpg"/>
+                </f:facet>
+
+                <h:outputText value="Nombre"/>
+                <h:outputText value="#{loginController.usuario.nombre}"/>
+
+                <h:outputText value="Apellidos"/>
+                <h:outputText value="#{loginController.usuario.apellido}"/>
+
+                <h:outputText value="Correo"/>
+                <h:outputText value="#{loginController.usuario.correo}"/>
+
+                <h:outputText value="Rol"/>
+                <h:outputText value="#{loginController.usuario.rol}"/>
+                
+                <h:outputText value="Manager"/>
+                <h:outputText value="#{loginController.usuario.manager}"/>
+                <h:outputText value="Fecha Inicio"/>
+                <h:outputText value="#{loginController.usuario.fechaInicio}"/>
+                <h:outputText value="Dias Vacaciones"/>
+                <h:outputText value="#{loginController.usuario.diasVacaiones}"/>
+            </p:panelGrid>
+        </div>
+        
+        <p:dialog header="Detalle del usuario" showEffect="fade" modal="true"
+                  widgetVar="editarPerfil" responsive="true">
+            <p:outputPanel id="manage-user-contentEdit" class="ui-fluid">
+
+
+
+
+                <p:outputPanel>
+                    <div class="p-field">
+                        <p:outputLabel for="mail2">Correo</p:outputLabel>
+                        <p:inputText id="mail2" required="true" disabled="true" value="#{loginController.selectedUsuario.correo}"/>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="pass2">Clave</p:outputLabel>
+                        <p:inputText id="pass2" required="true" value="#{loginController.selectedUsuario.clave}"/>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="name2">Nombre</p:outputLabel>
+                        <p:inputText id="name2" required="true" value="#{loginController.selectedUsuario.nombre}"/>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="surname2">Apellido</p:outputLabel>
+                        <p:inputText id="surname2" required="true" value="#{loginController.selectedUsuario.apellido}"/>
+                    </div>
+                    <div class="p-field">
+
+                        <p:outputLabel for="role2" value="Rol"/>
+                        <p:selectOneMenu id="role2" required="true" value="#{loginController.selectedUsuario.rol}">
+                            <f:selectItem itemLabel="Seleccione Rol" itemDisabled="true" itemValue=""/>
+                            <f:selectItem itemLabel="Admin" itemValue="Admin"/>
+                            <f:selectItem itemLabel="Manager" itemValue="Manager"/>
+                            <f:selectItem itemLabel="Colaborador" itemValue="Colaborador"/>
+                            <f:facet name="footer">
+                                <p:divider styleClass="mt-0" />
+                                <h:outputText value="3 options" style="font-weight:bold;"/>
+                            </f:facet>
+                        </p:selectOneMenu> 
+                    </div>
+
+                </p:outputPanel>
+
+
+            </p:outputPanel>
+            
+
+        </p:dialog>
+        <p:growl id="mensaje2"   showDetail="true"/>
+        
+        <p:commandButton value="Editar Perfil" icon="pi pi-cog" oncomplete="PF('editarPerfil').show()"
+                                 update="form manage-user-contentEdit" process="manage-user-contentEdit @this"/>  
+        
+    </h:form>    </h:body>
+>>>>>>> Roberto
 </html>
 
