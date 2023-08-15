@@ -207,6 +207,40 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
         return retorno;
 
     }
+    
+     public List<UsuarioTO> ObtenerYMostrarUsuarios() throws SQLException, Exception {
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection conn = super.getConection();
+
+        List<UsuarioTO> retorno = new ArrayList<UsuarioTO>();
+        try {
+            ps = getConection().prepareStatement("SELECT correo,clave,nombre,apellido,rol,manager,fechaInicio FROM USUARIO WHERE ESTADO='ACTIVO'");
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+
+                String correo = rs.getString("correo");
+                String clave = rs.getString("clave");
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+                String rol = rs.getString("rol");
+                String manager = rs.getString("manager");
+                Date fechaInicio = rs.getDate("fechaInicio");
+                UsuarioTO usuarioTO = new UsuarioTO(correo, clave, nombre, apellido, rol, manager,fechaInicio);
+                retorno.add(usuarioTO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            super.cerrar(conn);
+            super.cerrar(rs);
+            super.cerrar(ps);
+        }
+        return retorno;
+
+    }
 
     /* public UsuarioTO demeUsuario(int pk) throws SQLException, Exception {
 
