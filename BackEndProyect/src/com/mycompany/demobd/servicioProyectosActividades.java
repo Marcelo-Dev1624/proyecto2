@@ -24,7 +24,7 @@ public class servicioProyectosActividades extends Servicio implements ICrud<proy
         Connection conn = super.getConection();
         try {
 
-            ps = super.getConection().prepareStatement("INSERT INTO `proyecto2`.`actividadesproyectos` (`idActividad`, `correo_colaborador`, `nombreActividad`, `horasActividad`) VALUES (null, ?, ?, ?)");
+            ps = super.getConection().prepareStatement("INSERT INTO `proyecto2`.`actividades` (`idActividad`, `correo_colaborador`, `nombreActividad`, `horasActividad`) VALUES (null, ?, ?, ?)");
             
             
             ps.setString(1, proyectosActividadesTO.getCorreoUsuario());
@@ -50,7 +50,7 @@ public class servicioProyectosActividades extends Servicio implements ICrud<proy
 
         List<proyectosActividadesTO> retorno = new ArrayList<proyectosActividadesTO>();
         try {
-            ps = getConection().prepareStatement("SELECT * FROM actividadesproyectos where correo_colaborador = ?");
+            ps = getConection().prepareStatement("SELECT * FROM actividades where correo_colaborador = ?");
             ps.setString(1, correoColaboradorInput);
             
             rs = ps.executeQuery();

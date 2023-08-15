@@ -52,7 +52,7 @@
                 <p:resetInput target=":form:manage-user-contentAgregarPermiso"/>
             </p:commandButton>
 
-            <p:commandButton value="Ver Tickets Resueltos" icon="pi pi-check" rendered="#{loginController.usuario.rol eq 'Manager'}" actionListener="#{loginController.permisosResueltosAbrir()}" process="@this"/>
+            <p:commandButton value="Ver Tickets Resueltos" icon="pi pi-check" rendered="#{loginController.usuario.rol eq 'Manager' || loginController.usuario.rol eq 'Admin'}" actionListener="#{loginController.permisosResueltosAbrir()}" process="@this"/>
 
 
 
