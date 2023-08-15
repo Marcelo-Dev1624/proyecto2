@@ -3,12 +3,8 @@ import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import javax.faces.bean.SessionScoped;
 
-@ManagedBean
-@ViewScoped
-public class VacacionesController implements Serializable {
-
-<<<<<<< HEAD
 /**
  *
  * @author Brenda
@@ -19,7 +15,7 @@ public class VacacionesController implements Serializable {
 public class VacacionesController implements Serializable{
     
     
-    private String correo;
+  /*  private String correo;
     private String clave;
     private String nombre;
     private String apellidos;
@@ -45,7 +41,7 @@ public class VacacionesController implements Serializable{
    
     public void setCorreo(String correo) {
         this.correo = correo;
-=======
+
     private LocalDate startDate;
     private int vacationDays;
 
@@ -55,7 +51,7 @@ public class VacacionesController implements Serializable{
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
->>>>>>> Roberto
+
     }
 
     public int getVacationDays() {
@@ -67,5 +63,5 @@ public class VacacionesController implements Serializable{
         long daysWorked = ChronoUnit.DAYS.between(startDate, today);
         vacationDays = (int) (daysWorked / 30);
         System.out.println(vacationDays);
-    }
+    }*/
 }

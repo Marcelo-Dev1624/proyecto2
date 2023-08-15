@@ -37,6 +37,16 @@ public class UsuarioTO implements Serializable {
        
     }
 
+    public UsuarioTO(String correo, String clave, String nombre, String apellido, String rol, String manager, LocalDate fechaInicio) {
+        this.correo = correo;
+        this.clave = clave;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.rol = rol;
+        this.manager = manager;
+        this.fechaInicio = fechaInicio;
+    }
+
     
 
     public UsuarioTO(String correo, String nombre, String apellido, String rol, String manager, LocalDate fechaInicio, int diasVacaciones) {

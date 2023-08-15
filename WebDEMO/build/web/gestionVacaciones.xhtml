@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-<<<<<<< HEAD
+
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
@@ -38,19 +38,18 @@
 
         </div>
         <br/>
-=======
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-<h:head>
-    <title>Vacation Calculator</title>
-</h:head>
-<h:body>
-    <h:form>
-        <p:calendar value="#{loginController.selectedVacacion}" mode="multiple"/>
-        <p:commandButton value="Submit" action="#{loginController.submitVacation}" update="message"/>
-    </h:form>
-    <h:outputText id="message" value="Selected Vacation Dates: #{vacationBean.selectedDates}" />
-</h:body>
->>>>>>> Roberto
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui">
+        <h:head>
+            <title>Vacation Calculator</title>
+        </h:head>
+        <h:body>
+            <h:form>
+                <p:calendar value="#{loginController.selectedVacacion}" mode="multiple"/>
+                <p:commandButton value="Submit" action="#{loginController.submitVacation}" update="message"/>
+            </h:form>
+            <h:outputText id="message" value="Selected Vacation Dates: #{vacationBean.selectedDates}" />
+        </h:body>
+        
 
 </html>

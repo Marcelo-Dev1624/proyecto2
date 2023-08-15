@@ -89,7 +89,7 @@ public class proyectosController implements Serializable {
         }
 
     }
-    
+    /*
     public void insertar() {
 
         System.out.println("ESTOY EN EL INGRESAR");
@@ -141,7 +141,7 @@ public class proyectosController implements Serializable {
         return retorne;
 
     }
-
+*/
     @PostConstruct
     public void postConstruct() {
 

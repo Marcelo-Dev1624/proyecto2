@@ -234,7 +234,7 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
                 String apellido = rs.getString("apellido");
                 String rol = rs.getString("rol");
                 String manager = rs.getString("manager");
-                Date fechaInicio = rs.getDate("fechaInicio");
+                LocalDate fechaInicio = rs.getDate("fechaInicio").toLocalDate();
                 UsuarioTO usuarioTO = new UsuarioTO(correo, clave, nombre, apellido, rol, manager,fechaInicio);
                 retorno.add(usuarioTO);
             }
@@ -282,7 +282,7 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
         PreparedStatement ps = null;
         ResultSet rs = null;
         Connection conn = super.getConection();
-ServicioVacaciones servicioVacaciones = new ServicioVacaciones();
+        ServicioVacaciones servicioVacaciones = new ServicioVacaciones();
         UsuarioTO retorno = null;
         try {
             ps = getConection().prepareStatement("SELECT * FROM USUARIO WHERE correo = ? and clave = ?");
@@ -300,7 +300,7 @@ ServicioVacaciones servicioVacaciones = new ServicioVacaciones();
                 LocalDate fechaInicio = rs.getDate("fechaInicio").toLocalDate();
                 int diasVacaciones = servicioVacaciones.calcularDias(fechaInicio);
                 retorno = new UsuarioTO(correo,clave,nombre,apellido, rol, manager,fechaInicio, diasVacaciones);
-
+                System.out.println(retorno);
             }
         } catch (Exception e) {
             e.printStackTrace();
