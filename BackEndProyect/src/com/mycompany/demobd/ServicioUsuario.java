@@ -62,6 +62,8 @@ public class ServicioUsuario extends Servicio implements ICrud<UsuarioTO> {
             ps.setString(3, usuarioTO.getApellido());
             ps.setString(4, usuarioTO.getRol());
             ps.setString(5, usuarioTO.getCorreo());
+            
+            
 
             ps.executeUpdate();
 

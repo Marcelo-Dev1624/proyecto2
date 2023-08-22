@@ -5,15 +5,12 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Proyectos</title>
     </h:head>
     <h:body>
-
-        <p:commandButton value="Cerrar Sesion.." icon="pi pi-times" style="float:right;" actionListener="#{proyectosController.logoutSalir()}" process="@this"
+        <p:commandButton value="Cerrar Sesion.." icon="pi pi-times" style="float:right;" actionListener="#{loginController.logoutSalir()}" process="@this"
                          styleClass="ui-button-danger"/>
-        <h1>Gestión de Permisos</h1>
-
-
+        <h1> Lista de Proyectos </h1> 
         <div class="card">
 
             <p:tabMenu activeIndex="#{param.i}">
@@ -29,14 +26,17 @@
                 <p:menuitem value="Proyectos" outcome="proyectos" update="proyectos" icon="pi pi-sun">
                     <f:param name="i" value="3"/>
                 </p:menuitem> 
-                <p:menuitem value="Documentos" outcome="Documentos" update="Documentos" icon="pi pi-file-pdf">
+                <p:menuitem value="Actividades" outcome="actividades" update="actividades" icon="pi pi-sun">
                     <f:param name="i" value="4"/>
                 </p:menuitem> 
-                <p:menuitem value="Perfil" outcome="perfil" update="perfil" icon="pi pi-user">
+                <p:menuitem value="Documentos" outcome="Documentos" update="Documentos" icon="pi pi-file-pdf">
                     <f:param name="i" value="5"/>
                 </p:menuitem> 
-                <p:menuitem value="Gestionar vacaciones" outcome="gestionVacaciones" update="gestionVacaciones" icon="pi pi-sun">
+                <p:menuitem value="Perfil" outcome="perfil" update="perfil" icon="pi pi-user">
                     <f:param name="i" value="6"/>
+                </p:menuitem> 
+                <p:menuitem value="Gestionar vacaciones" outcome="gestionVacaciones" update="gestionVacaciones" icon="pi pi-sun">
+                    <f:param name="i" value="7"/>
                 </p:menuitem> 
 
             </p:tabMenu>
@@ -46,91 +46,181 @@
 
         <h:form id="form"> 
 
-
-
-
-           
-            
-            <p:inputText value="#{proyectosController.actividad.correoUsuario}" >
-                
-            </p:inputText>
-
-            <p:commandButton value="Buscar" actionListener="#{proyectosController.initActividades()}" update="form">
-                
+            <p:commandButton value="Nuevo proyecto" icon="pi pi-plus" actionListener="#{proyectosController.openNew}"
+                             update=":form:manage-user-contentAgregar" oncomplete="PF('manageUserDialogAgregar').show()"
+                             rendered="#{loginController.usuario.rol eq 'Admin'|| loginController.usuario.rol eq 'Manager'}"
+                             styleClass="ui-button-success" style="margin-right: .5rem">
+                <p:resetInput target=":form:manage-user-contentAgregar"/>
             </p:commandButton>
 
-            <p:commandButton  icon="pi pi-user" value="Crear actividad" update=":form:manage-user-contentRespuesta"
-                              oncomplete="PF('manageUserDialogRespuesta').show()" 
 
-                              styleClass="rounded-button ui-button-success" process="@this">
-               
-                <p:resetInput target=":form:manage-user-contentRespuesta"/>
-            </p:commandButton>
+
 
 
             <div class="card">
-                <p:dataTable var="actividades" value="#{proyectosController.actividades}" paginator="true" 
+                <p:dataTable var="proyecto" value="#{proyectosController.proyectos}" paginator="true" 
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rows="20">
 
-
-                    <p:column headerText="Correo del Colaborador" sortBy="#{actividades.correoUsuario}" filterBy="#{actividades.correoUsuario}" filterMatchMode="contains">
-                        <h:outputText value="#{actividades.correoUsuario}" />
+                    <p:column headerText="ID del Proyecto" sortBy="#{proyecto.idProyecto}" filterBy="#{proyecto.idProyecto}" filterMatchMode="contains">
+                        <h:outputText value="#{proyecto.idProyecto}" />
                     </p:column>
-                    <p:column headerText="Nombre de la actividad" sortBy="#{actividades.nombreActividad}" filterBy="#{actividades.nombreActividad}" filterMatchMode="contains">
-                        <h:outputText value="#{actividades.nombreActividad}" />
+                    <p:column headerText="Nombre del Proyecto"  sortBy="#{proyecto.nombreProyecto}" filterBy="#{proyecto.nombreProyecto}" filterMatchMode="contains">
+                        <h:outputText value="#{proyecto.nombreProyecto}" />
                     </p:column>
-
-                    <p:column headerText="Horas asignadas" sortBy="#{actividades.horasActividad}" filterBy="#{actividades.horasActividad}" filterMatchMode="contains">
-                        <h:outputText value="#{actividades.horasActividad}" />
+                    <p:column headerText="Encargado del Proyecto" sortBy="#{proyecto.encargadoProyecto}" filterBy="#{proyecto.encargadoProyecto}" filterMatchMode="contains">
+                        <h:outputText value="#{proyecto.encargadoProyecto}" />
                     </p:column>
 
+                   
+                    <p:column>
 
+                        <p:commandButton icon="pi pi-pencil"  update=":form:manage-user-contentEdit"
+                                         oncomplete="PF('manageUserDialogEdit').show()"
+                                         styleClass="edit-button rounded-button ui-button-success" 
+                                         rendered="#{loginController.usuario.rol eq 'Admin'|| loginController.usuario.rol eq 'Manager'}" process="@this">
+                            <f:setPropertyActionListener value="#{proyecto}"  target="#{proyectosController.selectedProyecto}"/>
+                            <p:resetInput target=":form:manage-user-contentEdit"/>
 
+                        </p:commandButton>
 
+                        <p:commandButton  icon="pi pi-times" update=":form:manage-user-contentDelete"
+                                          oncomplete="PF('manageUserDialogDelete').show()" 
+                                          rendered="#{loginController.usuario.rol eq 'Admin'|| loginController.usuario.rol eq 'Manager'}"
+                                          styleClass="rounded-button ui-button-danger" process="@this">
+                            <f:setPropertyActionListener value="#{proyecto}" target="#{proyectosController.selectedProyecto}"/>
+                            <p:resetInput target=":form:manage-user-contentDelete"/>
+                        </p:commandButton>
+
+                    </p:column>
                 </p:dataTable>
 
 
             </div>
 
+            <!-- Boton de Crear proyecto - Empieza-->
 
-
-            <p:dialog header="Detalle de las actividades" showEffect="fade" modal="true"
-                      widgetVar="manageUserDialogRespuesta" responsive="true">
-                <p:outputPanel id="manage-user-contentRespuesta" class="ui-fluid">
-
-                    <p:panel header="Seleccione una actividad" style="margin-bottom:10px;">
-
-                        <p:outputLabel for="actividad" value="Actividades: "/>
-                        <p:selectOneMenu id="actividad" value="#{proyectosController.actividad.nombreActividad}" style="width:150px">
-                           <f:selectItem itemLabel="actividadSeleccionar" itemValue="" noSelectionOption="true"/>
-                           <f:selectItems value="#{proyectosController.nombreActividades}"/>
-                        </p:selectOneMenu>
+            <p:dialog header="Detalle del usuario" showEffect="fade" modal="true"
+                      widgetVar="manageUserDialogAgregar" responsive="true">
+                <p:outputPanel id="manage-user-contentAgregar" class="ui-fluid">
 
 
 
+
+                    <p:outputPanel>
+                      
+                        
                         <div class="p-field">
-                            <p:outputLabel for="horas">Horas</p:outputLabel>
-                            <p:inputText id="horas" value="#{proyectosController.actividad.horasActividad}"/>
+                            <p:outputLabel for="nombreProyecto">Nombre del Proyecto</p:outputLabel>
+                            <p:inputText id="nombreProyecto" required="true" autocomplete="false" value="#{proyectosController.selectedProyecto.nombreProyecto}"/>
                         </div>
+                        <div class="p-field">
+                            <p:outputLabel for="encargadoProyecto">Encargado del Proyecto</p:outputLabel>
+                            <p:inputText id="encargadoProyecto" required="true" autocomplete="false" value="#{proyectosController.selectedProyecto.encargadoProyecto}"/>
+                        </div>
+                        
+                        
+
+                    </p:outputPanel>
+
+
+                </p:outputPanel>
+
+                <f:facet name="footer">     
+                    <p:commandButton value="Guardar" icon="pi pi-check"  actionListener="#{proyectosController.saveProyecto()}"
+                                     update="form manage-user-contentAgregar" process="manage-user-contentAgregar @this"/> 
+
+
+                    <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageUserDialogAgregar').hide()"
+                                     class="ui-button-secondary"/>
+                </f:facet>
+
+            </p:dialog>
+            <p:growl id="mensaje"   showDetail="true"/>
+
+
+            <!-- Boton de crear usuario - Termina-->
+
+
+            <!-- Boton de editar usuario - Empieza-->
+
+            <p:dialog header="Detalle del proyecto" showEffect="fade" modal="true"
+                      widgetVar="manageUserDialogEdit" responsive="true">
+                <p:outputPanel id="manage-user-contentEdit" class="ui-fluid">
 
 
 
 
+                    <p:outputPanel>
+                        <div class="p-field">
+                            <p:outputLabel for="mail2">ID del Proyecto</p:outputLabel>
+                            <p:inputText id="mail2" required="true" disabled="true" value="#{proyectosController.selectedProyecto.idProyecto}"/>
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel for="pass2">Nombre del Proyecto</p:outputLabel>
+                            <p:inputText id="pass2" required="true" value="#{proyectosController.selectedProyecto.nombreProyecto}"/>
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel for="name2">Encargado del Proyecto</p:outputLabel>
+                            <p:inputText id="name2" required="true" value="#{proyectosController.selectedProyecto.encargadoProyecto}"/>
+                        </div>
+                       
 
-                    </p:panel>
+                    </p:outputPanel>
+
 
                 </p:outputPanel>
 
                 <f:facet name="footer">       
-                    <p:commandButton value="Aprobar" icon="pi pi-check" actionListener="#{proyectosController.guardarActividad()}"
-                                     update="form" process="manage-user-contentRespuesta @this"/>     
-                    <p:commandButton value="Rechazar" styleClass="ui-button-danger" icon="pi pi-times" actionListener="#{proyectosController.guardarActividad()}"
-                                     update="form manage-user-contentRespuesta" process="manage-user-contentRespuesta @this"/> 
+                    <p:commandButton value="Actualizar" icon="pi pi-check" actionListener="#{proyectosController.updateProyecto()}"
+                                     update="form manage-user-contentEdit" process="manage-user-contentEdit @this"/>     
+                    <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageUserDialogEdit').hide()"
+                                     class="ui-button-secondary"/>
                 </f:facet>
 
             </p:dialog>
+            <p:growl id="mensaje2"   showDetail="true"/>
+            <!-- Boton de editar usuario  - Termina-->
 
+            <p:dialog header="Detalle del usuario" showEffect="fade" modal="true"
+                      widgetVar="manageUserDialogDelete" responsive="true">
+                <p:outputPanel id="manage-user-contentDelete" class="ui-fluid">
+
+
+
+
+                    <p:outputPanel>
+                        <div class="p-field">
+                            <p:outputLabel for="mail3">ID del Proyecto</p:outputLabel>
+                            <p:inputText id="mail3" disabled="true"  value="#{proyectosController.selectedProyecto.idProyecto}"/>
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel for="pass3">Nombre del Proyecto</p:outputLabel>
+                            <p:inputText id="pass3" disabled="true" value="#{proyectosController.selectedProyecto.nombreProyecto}"/>
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel for="name3">Encargado del Proyecto</p:outputLabel>
+                            <p:inputText id="name3" disabled="true" value="#{proyectosController.selectedProyecto.encargadoProyecto}"/>
+                        </div>
+                        
+                        <div class="p-field">
+                            <p:outputLabel>ESTA SEGURO DE ELIMINAR ESTE PROYECTO?</p:outputLabel>
+
+                        </div>
+
+                    </p:outputPanel>
+
+
+                </p:outputPanel>
+
+                <f:facet name="footer">       
+                    <p:commandButton value="Eliminar" styleClass="ui-button-danger" icon="pi pi-check" actionListener="#{proyectosController.deleteProyecto()}"
+                                     update="form manage-user-contentDelete" process="manage-user-contentDelete @this"/>     
+                    <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageUserDialogDelete').hide()"
+                                     class="ui-button-secondary"/>
+                </f:facet>
+
+            </p:dialog>
         </h:form>
     </h:body>
 </html>

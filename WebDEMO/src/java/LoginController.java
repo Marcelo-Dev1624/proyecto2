@@ -8,6 +8,7 @@ import com.mycompany.demobd.ServicioUsuario;
 import com.mycompany.demobd.UsuarioTO;
 import com.mycompany.demobd.VacacionesTO;
 import com.mycompany.demobd.ServicioVacaciones;
+import com.sun.corba.se.impl.naming.pcosnaming.NameService;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -47,6 +48,9 @@ public class LoginController implements Serializable {
     private ServicioUsuario su;
     private boolean esNuevo = false;
     private UsuarioTO selectedUsuario = new UsuarioTO();
+    
+    private String managerFromUser;
+    private List<String> managersFromUsers;
 
     private int numTicket;
     private String tipo;
@@ -85,8 +89,12 @@ public class LoginController implements Serializable {
         }
 
     }
+    
 
     @PostConstruct
+    
+   
+    
     public void mostrarUsuarios() {
         try {
             ServicioUsuario su = new ServicioUsuario();
@@ -136,14 +144,14 @@ public class LoginController implements Serializable {
 
     public UsuarioTO validacionUsuario() {
 
-        UsuarioTO retorne = new UsuarioTO(this.correo, this.clave, this.nombre, this.apellido, this.rol,this.manager, this.fechaInicio,this.diasVacaciones);
+        UsuarioTO retorne = new UsuarioTO(this.correo, this.clave, this.nombre, this.apellido, this.rol, this.manager, this.fechaInicio, this.diasVacaciones);
 
         try {
 
             ServicioUsuario su = new ServicioUsuario();
             retorne = su.demeUsuario(correo, clave);
             usuario = retorne;
-            
+
             if (retorne != null) {
                 mostrarUsuarios();
                 this.redireccionar("/faces/bienvenida.xhtml");
@@ -183,6 +191,8 @@ public class LoginController implements Serializable {
 
     }
 
+    
+    
     public void updateUser() {
         try {
             ServicioUsuario su = new ServicioUsuario();
@@ -268,9 +278,6 @@ public class LoginController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Permiso Rechazado", "Permiso Rechazado Correctamente"));
 
     }
-    
-    
-
 
     public LoginController() {
     }
@@ -496,5 +503,5 @@ public class LoginController implements Serializable {
     public void setSelectedVacacion(VacacionesTO selectedVacacion) {
         this.selectedVacacion = selectedVacacion;
     }
-    
+
 }
