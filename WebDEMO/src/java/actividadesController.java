@@ -52,8 +52,9 @@ public class actividadesController implements Serializable {
     private String nombreActividad;
     private String nombreProyecto;
     private String encargadoProyecto;
+    private int idProyecto;
 
-    public actividadesController(String correo, String clave, String nombre, String apellidos, String estado, String rol, String manager, Date fechaInicio, ServicioUsuario su, List<UsuarioTO> usuarios, UsuarioTO usuario, boolean esNuevo, ActividadesTO actividad, String nombreActividad, String nombreProyecto, String encargadoProyecto, List<ActividadesTO> actividades, Map<String, String> nombreActividades) {
+    public actividadesController(String correo, String clave, String nombre, String apellidos, String estado, String rol, String manager, Date fechaInicio, ServicioUsuario su, List<UsuarioTO> usuarios, UsuarioTO usuario, boolean esNuevo, ActividadesTO actividad, String nombreActividad, String nombreProyecto, String encargadoProyecto, int idProyecto, List<ActividadesTO> actividades, Map<String, String> nombreActividades) {
         this.correo = correo;
         this.clave = clave;
         this.nombre = nombre;
@@ -70,11 +71,16 @@ public class actividadesController implements Serializable {
         this.nombreActividad = nombreActividad;
         this.nombreProyecto = nombreProyecto;
         this.encargadoProyecto = encargadoProyecto;
+        this.idProyecto = idProyecto;
         this.actividades = actividades;
         this.nombreActividades = nombreActividades;
     }
 
-    private ActividadesTO selectedActividad = new ActividadesTO();
+    
+
+   
+
+    private ActividadesTO SelectedActividad = new ActividadesTO();
     private List<ActividadesTO> actividades;
 
     private Map<String, String> nombreActividades;
@@ -85,6 +91,7 @@ public class actividadesController implements Serializable {
     @PostConstruct
     public void postConstruct() {
 
+        mostrarActividades();
         nombreActividades = new HashMap<>();
 
         nombreActividades.put("Comer", "Comer");
@@ -94,8 +101,8 @@ public class actividadesController implements Serializable {
         nombreActividades.put("Terminar", "Terminar");
         nombreActividades.put("Descansar", "Descansar");
 
-        mostrarUsuarios();
-        actividad = new ActividadesTO();
+        
+        SelectedActividad = new ActividadesTO();
     }
 
     public void initActividades() {
@@ -125,9 +132,9 @@ public class actividadesController implements Serializable {
 
     public void openNew() {
         this.esNuevo = true;
-        this.selectedUsuario = new UsuarioTO();
+        
 
-        this.selectedActividad = new ActividadesTO();
+        this.actividad = new ActividadesTO();
 
     }
 
@@ -144,16 +151,59 @@ public class actividadesController implements Serializable {
     public void guardarActividad() {
 
         try {
-            for (UsuarioTO usuario : new ServicioUsuario().demeUsuariosAdmin()) {
-                if (usuario.getCorreo().equals(actividad.getCorreoColaborador())) {
-                    new servicioActividades().insertar(actividad);
-                }
-            }
+            
+                 servicioActividades sa = new servicioActividades();
+            sa.insertar(SelectedActividad);
+            this.esNuevo = false;
+            this.SelectedActividad = new ActividadesTO();
+            PrimeFaces.current().executeScript("PF('manageUserDialogEdit').hide()");
+            mostrarActividades();
+            
 
         } catch (Exception e) {
         }
 
         initActividades();
+
+    }
+    
+    public void mostrarActividades(){
+        servicioActividades sa = new servicioActividades();
+        
+        try {
+            this.actividades = new servicioActividades().obtenerActividadesAdmin();
+        } catch (Exception ex) {
+            Logger.getLogger(actividadesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    
+     public void updateActividad() {
+        try {
+            servicioActividades sa = new servicioActividades();
+            sa.modificar(SelectedActividad);
+            this.esNuevo = false;
+            this.SelectedActividad = new ActividadesTO();
+            PrimeFaces.current().executeScript("PF('manageUserDialogEdit').hide()");
+            mostrarActividades();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Actividad Editada", "Actividad Editada Correctamente"));
+
+    }
+     
+     public void deleteActividad() {
+        System.out.println("Estoy eliminando al proyecto");
+        try {
+            servicioActividades sp = new servicioActividades();
+            sp.eliminar(SelectedActividad);
+            mostrarActividades();
+        } catch (Exception ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Actividad Eliminada", "Actividad Eliminada Correctamente"));
 
     }
 
@@ -171,6 +221,10 @@ public class actividadesController implements Serializable {
 
     public String getApellidos() {
         return apellidos;
+    }
+
+    public int getIdProyecto() {
+        return idProyecto;
     }
 
     public String getEstado() {
@@ -226,8 +280,10 @@ public class actividadesController implements Serializable {
     }
 
     public ActividadesTO getSelectedActividad() {
-        return selectedActividad;
+        return SelectedActividad;
     }
+
+   
 
     public List<ActividadesTO> getActividades() {
         return actividades;
@@ -239,6 +295,10 @@ public class actividadesController implements Serializable {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    public void setIdProyecto(int idProyecto) {
+        this.idProyecto = idProyecto;
     }
 
     public void setClave(String clave) {
@@ -305,10 +365,11 @@ public class actividadesController implements Serializable {
         this.nombreActividad = nombreActividad;
     }
 
-    public void setSelectedActividad(ActividadesTO selectedActividad) {
-        this.selectedActividad = selectedActividad;
+    public void setSelectedActividad(ActividadesTO SelectedActividad) {
+        this.SelectedActividad = SelectedActividad;
     }
 
+   
     public void setActividades(List<ActividadesTO> actividades) {
         this.actividades = actividades;
     }

@@ -154,7 +154,7 @@ public class LoginController implements Serializable {
 
             if (retorne != null) {
                 mostrarUsuarios();
-                this.redireccionar("/faces/bienvenida.xhtml");
+                this.redireccionar("/faces/usuarios.xhtml");
 
             } else {
 
