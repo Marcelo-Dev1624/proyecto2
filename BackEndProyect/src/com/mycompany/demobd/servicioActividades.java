@@ -25,13 +25,13 @@ public class servicioActividades extends Servicio implements ICrud<ActividadesTO
         Connection conn = super.getConection();
         try {
 
-            ps = super.getConection().prepareStatement("INSERT INTO `proyecto2`.`proyectosactividades` (`id`, `correo_colaborador`, `id_proyecto`, `nombre_actividad`, `horas_actividad` ) VALUES (null, ?, ?, ?,?)");
+            ps = super.getConection().prepareStatement("INSERT INTO `proyecto2`.`proyectosactividades` (`id`, `correo_colaborador`, `nombre_actividad`, `horas_actividad`,`id_proyecto` ) VALUES (null, ?, ?, ?,?)");
             
             
             ps.setString(1, proyectosActividadesTO.getCorreoColaborador());
-            ps.setInt(2, proyectosActividadesTO.getIdProyecto());
-            ps.setString(3, proyectosActividadesTO.getNombreActividad());
-            ps.setInt(4, proyectosActividadesTO.getHorasActividad());
+            ps.setString(2, proyectosActividadesTO.getNombreActividad());
+            ps.setInt(3, proyectosActividadesTO.getHorasActividad());
+            ps.setInt(4, proyectosActividadesTO.getIdProyecto());
             
             
             ps.executeUpdate();
@@ -65,13 +65,13 @@ public class servicioActividades extends Servicio implements ICrud<ActividadesTO
 
                 int id = rs.getInt("id");
                 String correoColaborador = rs.getString("correo_colaborador");
-                int idProyecto = rs.getInt("id_proyecto");
+                
                 String nombreActividad = rs.getString("nombre_actividad");
                 int horasActividad = rs.getInt("horas_actividad");
+                int idProyecto = rs.getInt("id_proyecto");
                 
                 
-                
-                ActividadesTO ActividadTO = new ActividadesTO(id,idProyecto, correoColaborador, nombreActividad, horasActividad);
+                ActividadesTO ActividadTO = new ActividadesTO(id, correoColaborador, nombreActividad, horasActividad, idProyecto);
                 retorno.add(ActividadTO);
             }
         } catch (Exception e) {
@@ -84,5 +84,58 @@ public class servicioActividades extends Servicio implements ICrud<ActividadesTO
         return retorno;
 
     }
+      
+       public void modificar(ActividadesTO proyectosActividadesTO) throws SQLException, Exception {
+
+        PreparedStatement ps = null;
+        Connection conn = super.getConection();
+        try {
+
+            ps = super.getConection().prepareStatement("UPDATE proyecto2.proyectosactividades SET correo_colaborador = ?,nombre_actividad = ?, horas_actividad = ?, nombre_actividad = ? WHERE id = ?");
+           
+             ps.setString(1, proyectosActividadesTO.getCorreoColaborador());
+            ps.setString(2, proyectosActividadesTO.getNombreActividad());
+            ps.setInt(3, proyectosActividadesTO.getHorasActividad());
+            ps.setInt(4, proyectosActividadesTO.getIdProyecto());
+            ps.setInt(5, proyectosActividadesTO.getId());
+            
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+
+            super.cerrar(ps);
+            super.cerrar(conn);
+        }
+    }
     
+       
+        public void eliminar(ActividadesTO proyectosActividadesTO) {
+        PreparedStatement ps = null;
+
+        try {
+            Connection conn = super.getConection();
+            ps = getConection().prepareStatement(
+                    "DELETE FROM proyecto2.proyectosactividades WHERE id = ?");
+            ps.setInt(1,proyectosActividadesTO.getId() );
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null && !ps.isClosed()) {
+                    ps.close();
+                    ps = null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
 }

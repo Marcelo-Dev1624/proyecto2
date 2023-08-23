@@ -17,8 +17,8 @@
         <div class="card">
 
             <p:tabMenu activeIndex="#{param.i}">
-               
-                 <p:menuitem value="Usuarios" outcome="usuarios" icon="pi pi-fw pi-calendar">
+
+                <p:menuitem value="Usuarios" outcome="usuarios" icon="pi pi-fw pi-calendar">
                     <f:param name="i" value="0"/>
                 </p:menuitem>
                 <p:menuitem value="Permisos" outcome="permisos" update="permiso" icon="pi pi-fw pi-pencil">
@@ -68,9 +68,7 @@
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rows="20">
 
-                    <p:column headerText="Nombre del Proyecto" sortBy="#{actividad.idProyecto}" filterBy="#{actividad.idProyecto}" filterMatchMode="contains">
-                        <h:outputText value="#{actividad.idProyecto}" />
-                    </p:column>
+
                     <p:column headerText="Correo del Colaborador" sortBy="#{actividad.correoColaborador}" filterBy="#{actividad.correoColaborador}" filterMatchMode="contains">
                         <h:outputText value="#{actividad.correoColaborador}" />
                     </p:column>
@@ -82,8 +80,31 @@
                     <p:column headerText="Horas asignadas" sortBy="#{actividad.horasActividad}" filterBy="#{actividad.horasActividad}" filterMatchMode="contains">
                         <h:outputText value="#{actividad.horasActividad}" />
                     </p:column>
-                    login
+                    <p:column headerText="ID del Proyecto" sortBy="#{actividad.idProyecto}" filterBy="#{actividad.idProyecto}" filterMatchMode="contains">
+                        <h:outputText value="#{actividad.idProyecto}" />
+                    </p:column>
 
+
+                    <p:column>
+
+                        <p:commandButton icon="pi pi-pencil"  update=":form:manage-user-contentEdit"
+                                         oncomplete="PF('manageUserDialogEdit').show()"
+                                         styleClass="edit-button rounded-button ui-button-success" 
+                                         rendered="#{loginController.usuario.rol eq 'Admin'|| loginController.usuario.rol eq 'Manager'}" process="@this">
+                            <f:setPropertyActionListener value="#{actividad}"  target="#{actividadesController.selectedActividad}"/>
+                            <p:resetInput target=":form:manage-user-contentEdit"/>
+
+                        </p:commandButton>
+                        
+                         <p:commandButton  icon="pi pi-times" update=":form:manage-user-contentDelete"
+                                          oncomplete="PF('manageUserDialogDelete').show()" 
+                                          rendered="#{loginController.usuario.rol eq 'Admin'|| loginController.usuario.rol eq 'Manager'}"
+                                          styleClass="rounded-button ui-button-danger" process="@this">
+                             <f:setPropertyActionListener value="#{actividad}" target="#{actividadesController.selectedActividad}"/>
+                            <p:resetInput target=":form:manage-user-contentDelete"/>
+                        </p:commandButton>
+                      
+                    </p:column>
 
 
 
@@ -110,7 +131,7 @@
                             <p:outputLabel for="nombreProyecto">ID del Proyecto</p:outputLabel>
                             <p:inputText id="nombreProyecto" value="#{actividadesController.actividad.idProyecto}"/>
                         </div>
-                        
+
                         <div class="p-field">
                             <p:outputLabel for="correoColaborador">Correo del colaborador encargado</p:outputLabel>
                             <p:inputText id="correoColaborador" value="#{actividadesController.actividad.correoColaborador}"/>
@@ -135,12 +156,110 @@
                 <f:facet name="footer">       
                     <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{actividadesController.guardarActividad()}"
                                      update="form" process="manage-user-contentRespuesta @this"/>     
-                    <p:commandButton value="Cancelar" styleClass="ui-button-danger" icon="pi pi-times" actionListener="#{actividadesController.guardarActividad()}"
+                    <p:commandButton value="Cancelar" styleClass="ui-button-danger" icon="pi pi-times" onclick="PF('manageUserDialogRespuesta').hide()"
                                      update="form manage-user-contentRespuesta" process="manage-user-contentRespuesta @this"/> 
                 </f:facet>
 
             </p:dialog>
 
+
+
+            <p:dialog header="Detalle de la actividad" showEffect="fade" modal="true"
+                      widgetVar="manageUserDialogEdit" responsive="true">
+                <p:outputPanel id="manage-user-contentEdit" class="ui-fluid">
+
+
+                    <p:panel header="Seleccione una actividad" style="margin-bottom:10px;">
+
+                        <p:outputLabel for="actividad2" value="Actividades: "/>
+                        <p:selectOneMenu id="actividad2" value="#{actividadesController.selectedActividad.nombreActividad}" style="width:150px">
+                            <f:selectItem itemLabel="actividadSeleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{actividadesController.nombreActividades}"/>
+                        </p:selectOneMenu>
+
+                        <div class="p-field">
+                            <p:outputLabel for="nombreProyecto2">ID del Proyecto</p:outputLabel>
+                            <p:inputText id="nombreProyecto2" value="#{actividadesController.selectedActividad.idProyecto}"/>
+                        </div>
+
+                        <div class="p-field">
+                            <p:outputLabel for="correoColaborador2">Correo del colaborador encargado</p:outputLabel>
+                            <p:inputText id="correoColaborador2" value="#{actividadesController.selectedActividad.correoColaborador}"/>
+                        </div>
+
+
+                        <div class="p-field">
+                            <p:outputLabel for="horas2">Horas a asignar</p:outputLabel>
+                            <p:inputText id="horas2" value="#{actividadesController.selectedActividad.horasActividad}"/>
+                        </div>
+
+                    </p:panel>
+
+                </p:outputPanel>
+
+
+                
+
+                <f:facet name="footer">       
+                    <p:commandButton value="Actualizar" icon="pi pi-check" actionListener="#{actividadesController.updateActividad()}"
+                                     update="form manage-user-contentEdit" process="manage-user-contentEdit @this"/>     
+                    <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageUserDialogEdit').hide()"
+                                     class="ui-button-secondary"/>
+                </f:facet>
+
+            </p:dialog>
+            <p:growl id="mensaje2"   showDetail="true"/>
+
+            <!-- editar actividad termina -->
+
+            
+             <p:dialog header="Detalle de la actividad" showEffect="fade" modal="true"
+                      widgetVar="manageUserDialogDelete" responsive="true">
+                <p:outputPanel id="manage-user-contentDelete" class="ui-fluid">
+
+
+                    <p:panel header="Seleccione una actividad" style="margin-bottom:10px;">
+
+                        <p:outputLabel for="actividad3" value="Actividades: "/>
+                        <p:selectOneMenu id="actividad3" value="#{actividadesController.selectedActividad.nombreActividad}" style="width:150px">
+                            <f:selectItem itemLabel="actividadSeleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{actividadesController.nombreActividades}"/>
+                        </p:selectOneMenu>
+
+                        <div class="p-field">
+                            <p:outputLabel for="nombreProyecto3">ID del Proyecto</p:outputLabel>
+                            <p:inputText id="nombreProyecto3" value="#{actividadesController.selectedActividad.idProyecto}"/>
+                        </div>
+
+                        <div class="p-field">
+                            <p:outputLabel for="correoColaborador3">Correo del colaborador encargado</p:outputLabel>
+                            <p:inputText id="correoColaborador3" value="#{actividadesController.selectedActividad.correoColaborador}"/>
+                        </div>
+
+
+                        <div class="p-field">
+                            <p:outputLabel for="horas3">Horas a asignar</p:outputLabel>
+                            <p:inputText id="horas3" value="#{actividadesController.selectedActividad.horasActividad}"/>
+                        </div>
+
+                    </p:panel>
+
+                </p:outputPanel>
+
+
+                
+
+                <f:facet name="footer">       
+                    <p:commandButton value="Eliminar" icon="pi pi-check" styleClass="ui-button-danger" actionListener="#{actividadesController.deleteActividad()}"
+                                     update="form manage-user-contentDelete" process="manage-user-contentDelete @this"/>     
+                    <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageUserDialogDelete').hide()"
+                                     class="ui-button-secondary"/>
+                </f:facet>
+
+            </p:dialog>
+            <p:growl id="mensaje3"   showDetail="true"/>
+
+            <!-- editar actividad termina -->
         </h:form>
     </h:body>
 </html>

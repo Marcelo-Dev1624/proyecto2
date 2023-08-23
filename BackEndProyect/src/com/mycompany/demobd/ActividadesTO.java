@@ -12,35 +12,27 @@ import java.io.Serializable;
  * @author Brenda
  */
 public class ActividadesTO implements Serializable {
+
     private int id;
     private String correoColaborador;
-    private int idProyecto;
+
     private String nombreActividad;
     private int horasActividad;
+    private int idProyecto;
 
     public ActividadesTO() {
     }
 
-    public ActividadesTO(int id, String correoColaborador, int idProyecto, String nombreActividad, int horasActividad) {
+    public ActividadesTO(int id, String correoColaborador, String nombreActividad, int horasActividad, int idProyecto) {
         this.id = id;
         this.correoColaborador = correoColaborador;
-        this.idProyecto = idProyecto;
         this.nombreActividad = nombreActividad;
         this.horasActividad = horasActividad;
+        this.idProyecto = idProyecto;
     }
-
-    ActividadesTO(int id, int idProyecto, String correoColaborador, String nombreActividad, int horasActividad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-   
-
-  
-
-   
 
     
-
+    
     public int getId() {
         return id;
     }
@@ -52,9 +44,6 @@ public class ActividadesTO implements Serializable {
     public int getIdProyecto() {
         return idProyecto;
     }
-
-   
-   
 
     public String getNombreActividad() {
         return nombreActividad;
@@ -76,15 +65,12 @@ public class ActividadesTO implements Serializable {
         this.idProyecto = idProyecto;
     }
 
-   
-
     public void setNombreActividad(String nombreActividad) {
         this.nombreActividad = nombreActividad;
     }
 
-    
     public void setHorasActividad(int horasActividad) {
         this.horasActividad = horasActividad;
     }
-    
+
 }
