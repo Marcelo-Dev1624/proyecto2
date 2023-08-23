@@ -80,8 +80,8 @@
                         <h:outputText value="#{usuario.manager}" />
                     </p:column>
                     
-                    <p:column headerText="Dias Vacaciones" sortBy="#{usuario.diasVacaiones}" filterBy="#{usuario.diasVacaiones}" filterMatchMode="contains">
-                        <h:outputText value="#{usuario.diasVacaiones}" />
+                    <p:column headerText="Dias Vacaciones" rendered="#{loginController.usuario.rol eq 'Admin'||loginController.usuario.rol eq 'Manager' }" sortBy="#{usuario.diasVacaciones}" filterBy="#{usuario.diasVacaciones}" filterMatchMode="contains">
+                        <h:outputText value="#{usuario.diasVacaciones}" />
                     </p:column>
                     <p:column>
 

@@ -38,18 +38,16 @@
 
         </div>
         <br/>
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:p="http://primefaces.org/ui">
-        <h:head>
-            <title>Vacation Calculator</title>
-        </h:head>
-        <h:body>
-            <h:form>
-                <p:calendar value="#{loginController.selectedVacacion}" mode="multiple"/>
-                <p:commandButton value="Submit" action="#{loginController.submitVacation}" update="message"/>
-            </h:form>
-            <h:outputText id="message" value="Selected Vacation Dates: #{vacationBean.selectedDates}" />
-        </h:body>
-        
+
+
+        <h:form>
+            <p:calendar value="#{loginController.selectedVacacion.fechaInicio}" mode="popup" showOn="button"/>
+            <p:calendar value="#{loginController.selectedVacacion.fechaFinal}" mode="popup" showOn="button"/>
+
+            <p:commandButton value="Submit" action="#{loginController.submitVacation}" update="message"/>
+        </h:form>
+        <h:outputText id="message" value="Selected Vacation Dates: #{loginController.selectedVacacion.fechaInicio} - #{loginController.selectedVacacion.fechaFinal}" />
+    </h:body>
+
 
 </html>

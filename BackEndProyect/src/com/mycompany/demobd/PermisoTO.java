@@ -5,6 +5,7 @@
 package com.mycompany.demobd;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  *
@@ -18,8 +19,21 @@ public class PermisoTO implements Serializable {
     private String remitente;
     private String receptor;
     private String estado;
+    private LocalDate fechaInicial;
+    private LocalDate fechaFinal;
 
     public PermisoTO() {
+    }
+
+    public PermisoTO(int numTicket, String tipo, String motivo, String remitente, String receptor, String estado, LocalDate fechaInicial, LocalDate fechaFinal) {
+        this.numTicket = numTicket;
+        this.tipo = tipo;
+        this.motivo = motivo;
+        this.remitente = remitente;
+        this.receptor = receptor;
+        this.estado = estado;
+        this.fechaInicial = fechaInicial;
+        this.fechaFinal = fechaFinal;
     }
 
     public PermisoTO(int numTicket, String tipo, String motivo, String remitente, String receptor, String estado) {
@@ -37,6 +51,16 @@ public class PermisoTO implements Serializable {
         this.motivo = motivo;
         this.remitente = remitente;
         this.estado = estado;
+    }
+
+    public PermisoTO(int numTicket, String tipo, String motivo, String remitente, String receptor, String estado, LocalDate fechaInicial) {
+        this.numTicket = numTicket;
+        this.tipo = tipo;
+        this.motivo = motivo;
+        this.remitente = remitente;
+        this.receptor = receptor;
+        this.estado = estado;
+        this.fechaInicial = fechaInicial;
     }
     
 
@@ -87,4 +111,23 @@ public class PermisoTO implements Serializable {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+   
+
+    public LocalDate getFechaInicial() {
+        return fechaInicial;
+    }
+
+    public void setFechaInicial(LocalDate fechaInicial) {
+        this.fechaInicial = fechaInicial;
+    }
+
+    public LocalDate getFechaFinal() {
+        return fechaFinal;
+    }
+
+    public void setFechaFinal(LocalDate fechaFinal) {
+        this.fechaFinal = fechaFinal;
+    }
+    
 }

@@ -22,11 +22,21 @@ public class UsuarioTO implements Serializable {
     private String rol;
     private String manager;
     private LocalDate fechaInicio;
-    private int diasVacaciones;
-
-    
+    private long diasVacaciones;
+    private long diasConcedidos;
 
     public UsuarioTO() {
+    }
+
+    public UsuarioTO(String correo, String nombre, String apellido, String rol, String manager, LocalDate fechaInicio, long diasVacaciones) {
+        this.correo = correo;
+        
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.rol = rol;
+        this.manager = manager;
+        this.fechaInicio = fechaInicio;
+        this.diasVacaciones = diasVacaciones;
     }
 
     public UsuarioTO(String correo, String clave, String rol, String manager) {
@@ -34,7 +44,7 @@ public class UsuarioTO implements Serializable {
         this.clave = clave;
         this.rol = rol;
         this.manager = manager;
-       
+
     }
 
     public UsuarioTO(String correo, String clave, String nombre, String apellido, String rol, String manager, LocalDate fechaInicio) {
@@ -47,11 +57,24 @@ public class UsuarioTO implements Serializable {
         this.fechaInicio = fechaInicio;
     }
 
+    public UsuarioTO(String correo, String clave, String nombre, String apellido, String rol, String manager, LocalDate fechaInicio, long diasVacaciones, long diasConcedidos) {
+        this.correo = correo;
+        this.clave = clave;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.rol = rol;
+        this.manager = manager;
+        this.fechaInicio = fechaInicio;
+        this.diasVacaciones = diasVacaciones;
+        this.diasConcedidos = diasConcedidos;
+    }
+
+    
     
 
-    public UsuarioTO(String correo, String nombre, String apellido, String rol, String manager, LocalDate fechaInicio, int diasVacaciones) {
+    public UsuarioTO(String correo, String clave, String nombre, String apellido, String rol, String manager, LocalDate fechaInicio, long diasVacaciones) {
         this.correo = correo;
-
+        this.clave = clave;
         this.nombre = nombre;
         this.apellido = apellido;
         this.rol = rol;
@@ -67,7 +90,7 @@ public class UsuarioTO implements Serializable {
         this.apellido = apellido;
         this.estado = estado;
     }*/
-    public UsuarioTO(String correo, String clave, String nombre, String apellido, String rol, String manager, LocalDate fechaInicio,int diasVacaciones) {
+    /*public UsuarioTO(String correo, String clave, String nombre, String apellido, String rol, String manager, LocalDate fechaInicio, int diasVacaciones) {
         this.correo = correo;
         this.clave = clave;
         this.nombre = nombre;
@@ -77,17 +100,15 @@ public class UsuarioTO implements Serializable {
         this.manager = manager;
         this.fechaInicio = fechaInicio;
         this.diasVacaciones = diasVacaciones;
-    }
+    }*/
 
-    public UsuarioTO(String correo, String clave, String rol, String manager, int diasVacaciones) {
+    public UsuarioTO(String correo, String clave, String rol, String manager, long diasVacaciones) {
         this.correo = correo;
         this.clave = clave;
         this.rol = rol;
         this.manager = manager;
         this.diasVacaciones = diasVacaciones;
     }
-
-   
 
     public UsuarioTO(String correo, String nombre, String apellido, String rol, String manager) {
         this.correo = correo;
@@ -96,6 +117,8 @@ public class UsuarioTO implements Serializable {
         this.rol = rol;
         this.manager = manager;
     }
+
+   
 
     public String getCorreo() {
         return correo;
@@ -161,12 +184,22 @@ public class UsuarioTO implements Serializable {
         this.fechaInicio = fechaInicio;
     }
 
-    public int getDiasVacaiones() {
+    
+
+    public long getDiasVacaciones() {
         return diasVacaciones;
     }
 
-    public void setDiasVacaiones(int diasVacaiones) {
-        this.diasVacaciones = diasVacaiones;
+    public void setDiasVacaciones(long diasVacaciones) {
+        this.diasVacaciones = diasVacaciones;
+    }
+
+    public long getDiasConcedidos() {
+        return diasConcedidos;
+    }
+
+    public void setDiasConcedidos(long diasConcedidos) {
+        this.diasConcedidos = diasConcedidos;
     }
 
 }
