@@ -21,10 +21,13 @@ public class DemoBD {
     public static void main(String[] args) {
         try {
             
-            proyectosActividadesTO po = new proyectosActividadesTO(2, "admin", "Tomar", 1);
+           /* ActividadesTO po = new ActividadesTO(1,"1", "admin", "Tomar", 1);
             
-            servicioProyectosActividades spa = new servicioProyectosActividades();
+            servicioActividades spa = new servicioActividades();
             spa.insertar(po);
+            System.out.println(po.getNombreActividad());
+            
+
             
             //UsuarioTO usuarioTO_1 = new UsuarioTO("test", "Jose Andres","admin");
             //insertar(usuarioTO_1);

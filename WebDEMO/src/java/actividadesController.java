@@ -6,8 +6,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import com.mycompany.demobd.UsuarioTO;
 import com.mycompany.demobd.ServicioUsuario;
-import com.mycompany.demobd.proyectosActividadesTO;
-import com.mycompany.demobd.servicioProyectosActividades;
+import com.mycompany.demobd.ActividadesTO;
+import com.mycompany.demobd.servicioActividades;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -27,9 +27,9 @@ import org.primefaces.PrimeFaces;
  *
  * @author Brenda
  */
-@ManagedBean(name = "proyectosController")
+@ManagedBean(name = "actividadesController")
 @SessionScoped
-public class proyectosController implements Serializable {
+public class actividadesController implements Serializable {
 
     private String correo;
     private String clave;
@@ -47,18 +47,13 @@ public class proyectosController implements Serializable {
     private UsuarioTO selectedUsuario = new UsuarioTO();
     private boolean esNuevo;
 
-    private proyectosActividadesTO actividad;
+    private ActividadesTO actividad;
 
     private String nombreActividad;
-    private proyectosActividadesTO selectedActividad = new proyectosActividadesTO();
-    private List<proyectosActividadesTO> actividades;
+    private String nombreProyecto;
+    private String encargadoProyecto;
 
-    private Map<String, String> nombreActividades;
-
-    public proyectosController() {
-    }
-
-    public proyectosController(String correo, String clave, String nombre, String apellidos, String estado, String rol, String manager, Date fechaInicio, ServicioUsuario su, List<UsuarioTO> usuarios, UsuarioTO usuario, boolean esNuevo, proyectosActividadesTO actividad, String nombreActividad, List<proyectosActividadesTO> actividades, Map<String, String> nombreActividades) {
+    public actividadesController(String correo, String clave, String nombre, String apellidos, String estado, String rol, String manager, Date fechaInicio, ServicioUsuario su, List<UsuarioTO> usuarios, UsuarioTO usuario, boolean esNuevo, ActividadesTO actividad, String nombreActividad, String nombreProyecto, String encargadoProyecto, List<ActividadesTO> actividades, Map<String, String> nombreActividades) {
         this.correo = correo;
         this.clave = clave;
         this.nombre = nombre;
@@ -73,75 +68,20 @@ public class proyectosController implements Serializable {
         this.esNuevo = esNuevo;
         this.actividad = actividad;
         this.nombreActividad = nombreActividad;
+        this.nombreProyecto = nombreProyecto;
+        this.encargadoProyecto = encargadoProyecto;
         this.actividades = actividades;
         this.nombreActividades = nombreActividades;
     }
 
-    public void initActividades() {
-        try {
-            for (UsuarioTO usuario : new ServicioUsuario().ObtenerYMostrarUsuarios()) {
-                if (usuario.getCorreo().equals(actividad.getCorreoUsuario())) {
-                    this.actividades = new servicioProyectosActividades().obtenerActividades(actividad.getCorreoUsuario());
-                }
-            }
+    private ActividadesTO selectedActividad = new ActividadesTO();
+    private List<ActividadesTO> actividades;
 
-        } catch (Exception e) {
-        }
+    private Map<String, String> nombreActividades;
 
+    public actividadesController() {
     }
-    /*
-    public void insertar() {
 
-        System.out.println("ESTOY EN EL INGRESAR");
-        System.out.println("EL VALOR DE USUARIO ES:" + this.getCorreo());
-        System.out.println("EL VALOR DE CLAVE ES:" + this.getClave());
-        boolean continuar = true;
-        if (this.getCorreo() == null || this.getCorreo().equals("")) {
-            FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Campos inválidos", "El usuario o la clave no son correctas"));
-            continuar = false;
-        }
-        if (this.getClave() == null || this.getClave().equals("")) {
-
-            FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Campos inválidos", "El usuario o la clave no son correctas"));
-            continuar = false;
-        }
-        if (continuar) {
-            validacionUsuario();
-
-        }
-
-    }
-    
-    
-    public UsuarioTO validacionUsuario() {
-
-        UsuarioTO retorne = new UsuarioTO(this.correo, this.clave, this.rol, this.manager, this.fechaInicio);
-
-        try {
-
-            ServicioUsuario su = new ServicioUsuario();
-            retorne = su.demeUsuario(correo, clave, rol, manager, fechaInicio);
-            usuario = retorne;
-
-            if (retorne != null) {
-                mostrarUsuarios();
-                this.redireccionar("/faces/bienvenida.xhtml");
-
-            } else {
-
-                FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Existe en la base de datos", "No Existe en la base de datos"));
-
-            }
-
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", "ERROR"));
-
-            e.printStackTrace();
-        }
-        return retorne;
-
-    }
-*/
     @PostConstruct
     public void postConstruct() {
 
@@ -150,11 +90,21 @@ public class proyectosController implements Serializable {
         nombreActividades.put("Comer", "Comer");
         nombreActividades.put("Dormir", "Dormir");
         nombreActividades.put("Trabajar", "Trabajar");
-        nombreActividades.put("Correr", "Correro");
-        nombreActividades.put("Cagar", "Cagar");
+        nombreActividades.put("Correr", "Correr");
+        nombreActividades.put("Terminar", "Terminar");
+        nombreActividades.put("Descansar", "Descansar");
 
         mostrarUsuarios();
-        actividad = new proyectosActividadesTO();
+        actividad = new ActividadesTO();
+    }
+
+    public void initActividades() {
+
+        try {
+            this.actividades = new servicioActividades().obtenerActividadesAdmin();
+        } catch (Exception ex) {
+            Logger.getLogger(actividadesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void mostrarUsuarios() {
@@ -177,7 +127,7 @@ public class proyectosController implements Serializable {
         this.esNuevo = true;
         this.selectedUsuario = new UsuarioTO();
 
-        this.selectedActividad = new proyectosActividadesTO();
+        this.selectedActividad = new ActividadesTO();
 
     }
 
@@ -192,14 +142,11 @@ public class proyectosController implements Serializable {
     }
 
     public void guardarActividad() {
-        if (actividad.getNombreActividad() != null && "".equals(actividad.getNombreActividad())) {
-            return;
-        }
 
         try {
             for (UsuarioTO usuario : new ServicioUsuario().demeUsuariosAdmin()) {
-                if (usuario.getCorreo().equals(actividad.getCorreoUsuario())) {
-                    new servicioProyectosActividades().insertar(actividad);
+                if (usuario.getCorreo().equals(actividad.getCorreoColaborador())) {
+                    new servicioActividades().insertar(actividad);
                 }
             }
 
@@ -262,19 +209,27 @@ public class proyectosController implements Serializable {
         return esNuevo;
     }
 
-    public proyectosActividadesTO getActividad() {
+    public String getEncargadoProyecto() {
+        return encargadoProyecto;
+    }
+
+    public ActividadesTO getActividad() {
         return actividad;
+    }
+
+    public String getNombreProyecto() {
+        return nombreProyecto;
     }
 
     public String getNombreActividad() {
         return nombreActividad;
     }
 
-    public proyectosActividadesTO getSelectedActividad() {
+    public ActividadesTO getSelectedActividad() {
         return selectedActividad;
     }
 
-    public List<proyectosActividadesTO> getActividades() {
+    public List<ActividadesTO> getActividades() {
         return actividades;
     }
 
@@ -306,6 +261,10 @@ public class proyectosController implements Serializable {
         this.rol = rol;
     }
 
+    public void setEncargadoProyecto(String encargadoProyecto) {
+        this.encargadoProyecto = encargadoProyecto;
+    }
+
     public void setManager(String manager) {
         this.manager = manager;
     }
@@ -334,7 +293,11 @@ public class proyectosController implements Serializable {
         this.esNuevo = esNuevo;
     }
 
-    public void setActividad(proyectosActividadesTO actividad) {
+    public void setNombreProyecto(String nombreProyecto) {
+        this.nombreProyecto = nombreProyecto;
+    }
+
+    public void setActividad(ActividadesTO actividad) {
         this.actividad = actividad;
     }
 
@@ -342,11 +305,11 @@ public class proyectosController implements Serializable {
         this.nombreActividad = nombreActividad;
     }
 
-    public void setSelectedActividad(proyectosActividadesTO selectedActividad) {
+    public void setSelectedActividad(ActividadesTO selectedActividad) {
         this.selectedActividad = selectedActividad;
     }
 
-    public void setActividades(List<proyectosActividadesTO> actividades) {
+    public void setActividades(List<ActividadesTO> actividades) {
         this.actividades = actividades;
     }
 

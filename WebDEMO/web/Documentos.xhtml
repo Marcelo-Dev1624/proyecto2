@@ -12,16 +12,16 @@
       <div class="card">
 
             <p:tabMenu activeIndex="#{param.i}">
-                <p:menuitem value="Home" outcome="bienvenida" icon="pi pi-fw pi-home">
+                <p:menuitem value="Usuarios" outcome="usuarios" icon="pi pi-fw pi-calendar">
                     <f:param name="i" value="0"/>
                 </p:menuitem>
-                <p:menuitem value="Usuarios" outcome="usuarios" icon="pi pi-fw pi-calendar">
+                <p:menuitem value="Permisos" outcome="permisos" update="permiso" icon="pi pi-fw pi-pencil">
                     <f:param name="i" value="1"/>
                 </p:menuitem>
-                <p:menuitem value="Permisos" outcome="permisos" update="permiso" icon="pi pi-fw pi-pencil">
-                    <f:param name="i" value="2"/>
-                </p:menuitem>
                 <p:menuitem value="Proyectos" outcome="proyectos" update="proyectos" icon="pi pi-sun">
+                    <f:param name="i" value="2"/>
+                </p:menuitem> 
+                <p:menuitem value="Actividades" outcome="actividades" update="actividades" icon="pi pi-sun">
                     <f:param name="i" value="3"/>
                 </p:menuitem> 
                 <p:menuitem value="Documentos" outcome="Documentos" update="Documentos" icon="pi pi-file-pdf">

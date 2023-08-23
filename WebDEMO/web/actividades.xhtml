@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+
+        <p:commandButton value="Cerrar Sesion.." icon="pi pi-times" style="float:right;" actionListener="#{loginController.logoutSalir()}" process="@this"
+                         styleClass="ui-button-danger"/>
+        <h1>Gestión de Actividades</h1>
+
+
+        <div class="card">
+
+            <p:tabMenu activeIndex="#{param.i}">
+               
+                 <p:menuitem value="Usuarios" outcome="usuarios" icon="pi pi-fw pi-calendar">
+                    <f:param name="i" value="0"/>
+                </p:menuitem>
+                <p:menuitem value="Permisos" outcome="permisos" update="permiso" icon="pi pi-fw pi-pencil">
+                    <f:param name="i" value="1"/>
+                </p:menuitem>
+                <p:menuitem value="Proyectos" outcome="proyectos" update="proyectos" icon="pi pi-sun">
+                    <f:param name="i" value="2"/>
+                </p:menuitem> 
+                <p:menuitem value="Actividades" outcome="actividades" update="actividades" icon="pi pi-sun">
+                    <f:param name="i" value="3"/>
+                </p:menuitem> 
+                <p:menuitem value="Documentos" outcome="Documentos" update="Documentos" icon="pi pi-file-pdf">
+                    <f:param name="i" value="4"/>
+                </p:menuitem> 
+                <p:menuitem value="Perfil" outcome="perfil" update="perfil" icon="pi pi-user">
+                    <f:param name="i" value="5"/>
+                </p:menuitem> 
+                <p:menuitem value="Gestionar vacaciones" outcome="gestionVacaciones" update="gestionVacaciones" icon="pi pi-sun">
+                    <f:param name="i" value="6"/>
+                </p:menuitem> 
+
+            </p:tabMenu>
+
+        </div>
+        <br/>
+
+        <h:form id="form"> 
+
+
+
+
+
+
+
+
+            <p:commandButton  icon="pi pi-user" value="Crear actividad" update=":form:manage-user-contentRespuesta"
+                              oncomplete="PF('manageUserDialogRespuesta').show()"  
+                              actionListener="#{actividadesController.initActividades()}"
+                              styleClass="rounded-button ui-button-success" process="@this" rendered="#{loginController.usuario.rol eq 'Admin'|| loginController.usuario.rol eq 'Manager'}">
+
+                <p:resetInput target=":form:manage-user-contentRespuesta"/>
+            </p:commandButton>
+
+
+            <div class="card">
+                <p:dataTable var="actividad" value="#{actividadesController.actividades}" paginator="true" 
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rows="20">
+
+                    <p:column headerText="Nombre del Proyecto" sortBy="#{actividad.idProyecto}" filterBy="#{actividad.idProyecto}" filterMatchMode="contains">
+                        <h:outputText value="#{actividad.idProyecto}" />
+                    </p:column>
+                    <p:column headerText="Correo del Colaborador" sortBy="#{actividad.correoColaborador}" filterBy="#{actividad.correoColaborador}" filterMatchMode="contains">
+                        <h:outputText value="#{actividad.correoColaborador}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre de la actividad" sortBy="#{actividad.nombreActividad}" filterBy="#{actividad.nombreActividad}" filterMatchMode="contains">
+                        <h:outputText value="#{actividad.nombreActividad}" />
+                    </p:column>
+
+                    <p:column headerText="Horas asignadas" sortBy="#{actividad.horasActividad}" filterBy="#{actividad.horasActividad}" filterMatchMode="contains">
+                        <h:outputText value="#{actividad.horasActividad}" />
+                    </p:column>
+                    login
+
+
+
+
+                </p:dataTable>
+
+
+            </div>
+
+
+
+            <p:dialog header="Detalle de las actividades" showEffect="fade" modal="true"
+                      widgetVar="manageUserDialogRespuesta"  responsive="true"> 
+                <p:outputPanel id="manage-user-contentRespuesta" class="ui-fluid">
+
+                    <p:panel header="Seleccione una actividad" style="margin-bottom:10px;">
+
+                        <p:outputLabel for="actividad" value="Actividades: "/>
+                        <p:selectOneMenu id="actividad" value="#{actividadesController.actividad.nombreActividad}" style="width:150px">
+                            <f:selectItem itemLabel="actividadSeleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{actividadesController.nombreActividades}"/>
+                        </p:selectOneMenu>
+
+                        <div class="p-field">
+                            <p:outputLabel for="nombreProyecto">ID del Proyecto</p:outputLabel>
+                            <p:inputText id="nombreProyecto" value="#{actividadesController.actividad.idProyecto}"/>
+                        </div>
+                        
+                        <div class="p-field">
+                            <p:outputLabel for="correoColaborador">Correo del colaborador encargado</p:outputLabel>
+                            <p:inputText id="correoColaborador" value="#{actividadesController.actividad.correoColaborador}"/>
+                        </div>
+
+
+                        <div class="p-field">
+                            <p:outputLabel for="horas">Horas a asignar</p:outputLabel>
+                            <p:inputText id="horas" value="#{actividadesController.actividad.horasActividad}"/>
+                        </div>
+
+
+
+
+
+
+
+                    </p:panel>
+
+                </p:outputPanel>
+
+                <f:facet name="footer">       
+                    <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{actividadesController.guardarActividad()}"
+                                     update="form" process="manage-user-contentRespuesta @this"/>     
+                    <p:commandButton value="Cancelar" styleClass="ui-button-danger" icon="pi pi-times" actionListener="#{actividadesController.guardarActividad()}"
+                                     update="form manage-user-contentRespuesta" process="manage-user-contentRespuesta @this"/> 
+                </f:facet>
+
+            </p:dialog>
+
+        </h:form>
+    </h:body>
+</html>
+

@@ -12,16 +12,17 @@
         <div class="card">
 
             <p:tabMenu activeIndex="#{param.i}">
-                <p:menuitem value="Home" outcome="bienvenida" icon="pi pi-fw pi-home">
+
+                <p:menuitem value="Usuarios" outcome="usuarios" icon="pi pi-fw pi-calendar">
                     <f:param name="i" value="0"/>
                 </p:menuitem>
-                <p:menuitem value="Usuarios" outcome="usuarios" icon="pi pi-fw pi-calendar">
+                <p:menuitem value="Permisos" outcome="permisos" update="permiso" icon="pi pi-fw pi-pencil">
                     <f:param name="i" value="1"/>
                 </p:menuitem>
-                <p:menuitem value="Permisos" outcome="permisos" update="permiso" icon="pi pi-fw pi-pencil">
-                    <f:param name="i" value="2"/>
-                </p:menuitem>
                 <p:menuitem value="Proyectos" outcome="proyectos" update="proyectos" icon="pi pi-sun">
+                    <f:param name="i" value="2"/>
+                </p:menuitem> 
+                <p:menuitem value="Actividades" outcome="actividades" update="actividades" icon="pi pi-sun">
                     <f:param name="i" value="3"/>
                 </p:menuitem> 
                 <p:menuitem value="Documentos" outcome="Documentos" update="Documentos" icon="pi pi-file-pdf">
@@ -38,18 +39,9 @@
 
         </div>
         <br/>
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:p="http://primefaces.org/ui">
-        <h:head>
-            <title>Vacation Calculator</title>
-        </h:head>
-        <h:body>
-            <h:form>
-                <p:calendar value="#{loginController.selectedVacacion}" mode="multiple"/>
-                <p:commandButton value="Submit" action="#{loginController.submitVacation}" update="message"/>
-            </h:form>
-            <h:outputText id="message" value="Selected Vacation Dates: #{vacationBean.selectedDates}" />
-        </h:body>
-        
+
+    </h:body>
+
+
 
 </html>
