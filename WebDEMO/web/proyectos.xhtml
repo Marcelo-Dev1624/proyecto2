@@ -14,29 +14,27 @@
         <div class="card">
 
             <p:tabMenu activeIndex="#{param.i}">
-                <p:menuitem value="Home" outcome="bienvenida" icon="pi pi-fw pi-home">
+               
+                 <p:menuitem value="Usuarios" outcome="usuarios" icon="pi pi-fw pi-calendar">
                     <f:param name="i" value="0"/>
                 </p:menuitem>
-                <p:menuitem value="Usuarios" outcome="usuarios" icon="pi pi-fw pi-calendar">
+                <p:menuitem value="Permisos" outcome="permisos" update="permiso" icon="pi pi-fw pi-pencil">
                     <f:param name="i" value="1"/>
                 </p:menuitem>
-                <p:menuitem value="Permisos" outcome="permisos" update="permiso" icon="pi pi-fw pi-pencil">
-                    <f:param name="i" value="2"/>
-                </p:menuitem>
                 <p:menuitem value="Proyectos" outcome="proyectos" update="proyectos" icon="pi pi-sun">
-                    <f:param name="i" value="3"/>
+                    <f:param name="i" value="2"/>
                 </p:menuitem> 
                 <p:menuitem value="Actividades" outcome="actividades" update="actividades" icon="pi pi-sun">
-                    <f:param name="i" value="4"/>
+                    <f:param name="i" value="3"/>
                 </p:menuitem> 
                 <p:menuitem value="Documentos" outcome="Documentos" update="Documentos" icon="pi pi-file-pdf">
-                    <f:param name="i" value="5"/>
+                    <f:param name="i" value="4"/>
                 </p:menuitem> 
                 <p:menuitem value="Perfil" outcome="perfil" update="perfil" icon="pi pi-user">
-                    <f:param name="i" value="6"/>
+                    <f:param name="i" value="5"/>
                 </p:menuitem> 
                 <p:menuitem value="Gestionar vacaciones" outcome="gestionVacaciones" update="gestionVacaciones" icon="pi pi-sun">
-                    <f:param name="i" value="7"/>
+                    <f:param name="i" value="6"/>
                 </p:menuitem> 
 
             </p:tabMenu>
@@ -72,7 +70,7 @@
                         <h:outputText value="#{proyecto.encargadoProyecto}" />
                     </p:column>
 
-                   
+
                     <p:column>
 
                         <p:commandButton icon="pi pi-pencil"  update=":form:manage-user-contentEdit"
@@ -108,8 +106,8 @@
 
 
                     <p:outputPanel>
-                      
-                        
+
+
                         <div class="p-field">
                             <p:outputLabel for="nombreProyecto">Nombre del Proyecto</p:outputLabel>
                             <p:inputText id="nombreProyecto" required="true" autocomplete="false" value="#{proyectosController.selectedProyecto.nombreProyecto}"/>
@@ -118,8 +116,8 @@
                             <p:outputLabel for="encargadoProyecto">Encargado del Proyecto</p:outputLabel>
                             <p:inputText id="encargadoProyecto" required="true" autocomplete="false" value="#{proyectosController.selectedProyecto.encargadoProyecto}"/>
                         </div>
-                        
-                        
+
+
 
                     </p:outputPanel>
 
@@ -164,7 +162,7 @@
                             <p:outputLabel for="name2">Encargado del Proyecto</p:outputLabel>
                             <p:inputText id="name2" required="true" value="#{proyectosController.selectedProyecto.encargadoProyecto}"/>
                         </div>
-                       
+
 
                     </p:outputPanel>
 
@@ -202,7 +200,7 @@
                             <p:outputLabel for="name3">Encargado del Proyecto</p:outputLabel>
                             <p:inputText id="name3" disabled="true" value="#{proyectosController.selectedProyecto.encargadoProyecto}"/>
                         </div>
-                        
+
                         <div class="p-field">
                             <p:outputLabel>ESTA SEGURO DE ELIMINAR ESTE PROYECTO?</p:outputLabel>
 
