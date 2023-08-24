@@ -40,8 +40,15 @@
         </div>
         <br/>
 
-    </h:body>
 
+        <h:form>
+            <p:calendar value="#{loginController.selectedVacacion.fechaInicio}" mode="popup" showOn="button"/>
+            <p:calendar value="#{loginController.selectedVacacion.fechaFinal}" mode="popup" showOn="button"/>
+
+            <p:commandButton value="Submit" action="#{loginController.submitVacation}" update="message"/>
+        </h:form>
+        <h:outputText id="message" value="Selected Vacation Dates: #{loginController.selectedVacacion.fechaInicio} - #{loginController.selectedVacacion.fechaFinal}" />
+    </h:body>
 
 
 </html>

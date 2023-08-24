@@ -65,6 +65,12 @@
                     <p:column headerText="Número Ticket" sortBy="#{permiso.numTicket}" filterBy="#{permiso.numTicket}" filterMatchMode="contains">
                         <h:outputText value="#{permiso.numTicket}" />
                     </p:column>
+                    <p:column headerText="Fecha Inicial" sortBy="#{permiso.fechaInicial}" filterBy="#{permiso.fechaInicial}" filterMatchMode="contains">
+                        <h:outputText value="#{permiso.fechaInicial}" />
+                    </p:column>
+                    <p:column headerText="Fecha Final" sortBy="#{permiso.fechaFinal}" filterBy="#{permiso.fechaFinal}" filterMatchMode="contains">
+                        <h:outputText value="#{permiso.fechaFinal}" />
+                    </p:column>
                     <p:column headerText="Tipo" sortBy="#{permiso.tipo}" filterBy="#{permiso.tipo}" filterMatchMode="contains">
                         <h:outputText value="#{permiso.tipo}" />
                     </p:column>
@@ -97,37 +103,70 @@
 
             </div>
 
-            <p:dialog header="Detalle del permiso" showEffect="fade" modal="true"
-                      widgetVar="manageUserDialogAgregarPermiso" responsive="true">
+            <p:dialog header="Detalle del permiso" showEffect="fade" modal="true" widgetVar="manageUserDialogAgregarPermiso"
+                      responsive="true">
                 <p:outputPanel id="manage-user-contentAgregarPermiso" class="ui-fluid">
                     <p:outputPanel>
 
-                        <p:outputLabel for="Tipo" value="Tipo"/>
-                        <p:selectOneMenu id="Tipo" required="true" value="#{loginController.selectedPermiso.tipo}">
-                            <f:selectItem itemLabel="Seleccione Tipo" itemDisabled="true" itemValue=""/>
-                            <f:selectItem itemLabel="Ausencia" itemValue="Ausencia"/>
-                            <f:selectItem itemLabel="Tardia" itemValue="Tardia"/>
-
-                        </p:selectOneMenu> 
                         <div class="p-field">
-                            <p:outputLabel for="motivo">Motivo</p:outputLabel>
-                            <p:inputTextarea id="motivo" required="true"  value="#{loginController.selectedPermiso.motivo}"/>
+                            <p:outputLabel for="Tipo" value="Tipo"/>
+                            <p:selectOneMenu id="Tipo" required="true" value="#{loginController.selectedPermiso.tipo}">
+                                <f:selectItem itemLabel="Seleccione Tipo" itemDisabled="true" itemValue=""/>
+                                <f:selectItem itemLabel="Ausencia" itemValue="Ausencia"/>
+                                <f:selectItem itemLabel="Tardia" itemValue="Tardia"/>
+                                <f:selectItem itemLabel="Vacaciones" itemValue="Vacaciones"/>
+                                <p:ajax update="permissionDetails" />
+                            </p:selectOneMenu>
                         </div>
 
+
+                        <p:panel id="permissionDetails">
+                            <p:outputPanel rendered="#{loginController.selectedPermiso.tipo eq 'Tardia' || loginController.selectedPermiso.tipo eq 'Ausencia'}">
+                                <p:outputLabel value="Fecha"/>
+                                <p:calendar value="#{loginController.selectedPermiso.fechaInicial}" mode="popup" showOn="button"/>
+
+                                <div class="p-field">
+                                    <p:outputLabel for="motivo">Motivo</p:outputLabel>
+                                    <p:inputTextarea id="motivo" required="true" value="#{loginController.selectedPermiso.motivo}"/>
+                                </div>
+                                <div class="p-field">
+                                    <p:commandButton value="Enviar" icon="pi pi-check" actionListener="#{loginController.savePermiso}"
+                                                     update="form manage-user-contentAgregarPermiso" process="manage-user-contentAgregarPermiso @this"/>
+                                </div>
+                            </p:outputPanel>
+
+                            <p:outputPanel rendered="#{loginController.selectedPermiso.tipo eq 'Vacaciones'}">
+                                <p:outputLabel value="Dias Disponibles: #{loginController.usuario.diasVacaciones}" />
+                                <br>
+                                    
+                                </br>
+                                <p:outputLabel value="Fecha Inicial"/>
+                                <p:calendar value="#{loginController.selectedVacacion.fechaInicio}" mode="popup" showOn="button" mindate="#{loginController.tomorrow}"/>
+
+                                <p:outputLabel value="Fecha Final"/>
+                                <p:calendar value="#{loginController.selectedVacacion.fechaFinal}" mode="popup" showOn="button"  mindate="#{loginController.selectedVacacion.fechaInicio}" />
+                                <div class="p-field">
+                                    <p:commandButton value="Enviar" action="#{loginController.submitVacation}" 
+                                                     update="form manage-user-contentAgregarPermiso" process="manage-user-contentAgregarPermiso @this"/>
+                                </div>
+                            </p:outputPanel>
+
+                            <style>
+                                .p-field {
+                                    margin-bottom: 30px; /* Adjust this value as needed */
+                                }
+                            </style>
+                        </p:panel>
+
                     </p:outputPanel>
-
-
                 </p:outputPanel>
 
-                <f:facet name="footer">     
-                    <p:commandButton value="Guardar" icon="pi pi-check"  actionListener="#{loginController.savePermiso}"
-                                     update="form manage-user-contentAgregarPermiso" process="manage-user-contentAgregarPermiso @this"/> 
+                <f:facet name="footer">
 
 
                     <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageUserDialogAgregarPermiso').hide()"
                                      class="ui-button-secondary"/>
                 </f:facet>
-
             </p:dialog>
             <p:growl id="mensaje3"   showDetail="true"/>
 
