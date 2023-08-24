@@ -48,9 +48,13 @@ public class LoginController implements Serializable {
     private ServicioUsuario su;
     private boolean esNuevo = false;
     private UsuarioTO selectedUsuario = new UsuarioTO();
+
     
     private String managerFromUser;
     private List<String> managersFromUsers;
+
+    private UsuarioTO userInfo = new UsuarioTO();
+
 
     private int numTicket;
     private String tipo;
@@ -63,10 +67,11 @@ public class LoginController implements Serializable {
     private PermisoTO selectedPermiso = new PermisoTO();
 
     private LocalDate fechaFinal;
-    private int diasVacaciones;
+    private long diasVacaciones;
     private List<VacacionesTO> vacaciones;
     private VacacionesTO selectedVacacion = new VacacionesTO();
     private long diasConcedidos;
+private LocalDate tomorrow;
 
     public void insertar() {
 
@@ -102,6 +107,7 @@ public class LoginController implements Serializable {
             this.usuarios = null;
             this.permisos = null;
             this.permisosResueltos = null;
+            tomorrow = LocalDate.now().plus(1, ChronoUnit.DAYS);
             if (this.usuario.getRol().equals("Admin")) {
                 this.usuarios = new ServicioUsuario().demeUsuariosAdmin();
                 this.permisos = new ServicioPermiso().demePermisos();
@@ -130,8 +136,14 @@ public class LoginController implements Serializable {
     }
 
     public void logoutSalir() {
-        this.redireccionar("/faces/index.xhtml");
-        this.usuario = null;
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+
+            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(request.getContextPath() + "/faces/index.xhtml?faces-redirect=true");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void permisosResueltosAbrir() {
@@ -144,7 +156,9 @@ public class LoginController implements Serializable {
 
     public UsuarioTO validacionUsuario() {
 
-        UsuarioTO retorne = new UsuarioTO(this.correo, this.clave, this.nombre, this.apellido, this.rol, this.manager, this.fechaInicio, this.diasVacaciones);
+
+        UsuarioTO retorne = new UsuarioTO(this.correo, this.clave, this.nombre, this.apellido, this.rol, this.manager, this.fechaInicio, this.diasVacaciones, this.diasConcedidos);
+
 
         try {
 
@@ -232,6 +246,7 @@ public class LoginController implements Serializable {
 
         try {
             ServicioPermiso sp = new ServicioPermiso();
+            selectedPermiso.setFechaFinal(selectedPermiso.getFechaInicial());
             selectedPermiso.setRemitente(this.usuario.getCorreo());
             selectedPermiso.setReceptor(this.usuario.getManager());
             sp.insertar(selectedPermiso);
@@ -276,6 +291,65 @@ public class LoginController implements Serializable {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Permiso Rechazado", "Permiso Rechazado Correctamente"));
+
+    }
+
+    public void submitVacation() throws Exception {
+        ServicioVacaciones sv = new ServicioVacaciones();
+        if (selectedVacacion.equals("")) {
+            System.out.println("No vacation dates selected.");
+        } else {
+
+            long diasAConceder = ChronoUnit.DAYS.between(selectedVacacion.getFechaInicio(), selectedVacacion.getFechaFinal()) + 1;
+
+            if (diasAConceder > this.usuario.getDiasVacaciones() || selectedVacacion.getFechaFinal().isBefore(selectedVacacion.getFechaInicio())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Exceeded available days or invalid input"));
+                return;
+            } else {
+                //selectedVacacion.setFechaFinal() = selectedVacacion.getFechaFinal(selectedVacacion.size() - 1);
+                sv.concederDias(diasAConceder, this.usuario.getCorreo());
+                selectedVacacion.setRemitente(this.usuario.getCorreo());
+                selectedVacacion.setReceptor(this.usuario.getManager());
+
+                sv.insertarVacaciones(selectedVacacion);
+                this.usuario.setDiasVacaciones(usuario.getDiasVacaciones()- diasAConceder);
+                mostrarUsuarios();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Vacation saved."));
+
+            }
+        }
+    }
+
+    public UsuarioTO mostrarPerfilUsuario() {
+
+        String user = this.getCorreo();
+
+        userInfo = new UsuarioTO(this.nombre, this.apellido, this.correo, this.rol, this.manager);
+
+        try {
+
+            ServicioUsuario su = new ServicioUsuario();
+            su.cUser = user;
+            userInfo = su.datosUsuario(nombre, apellido, correo, rol, manager);
+
+        } catch (Exception e) {
+        }
+
+        return userInfo;
+
+    }
+
+    public void updateProfile() {
+        try {
+            ServicioUsuario su = new ServicioUsuario();
+            su.modificarPerfil(userInfo);
+            this.esNuevo = false;
+            this.userInfo = new UsuarioTO();
+        } catch (Exception ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        mostrarUsuarios();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario Editado", "Usuario Editado Correctamente"));
 
     }
 
@@ -480,11 +554,11 @@ public class LoginController implements Serializable {
         this.fechaFinal = fechaFinal;
     }
 
-    public int getDiasVacaciones() {
+    public long getDiasVacaciones() {
         return diasVacaciones;
     }
 
-    public void setDiasVacaciones(int diasVacaciones) {
+    public void setDiasVacaciones(long diasVacaciones) {
         this.diasVacaciones = diasVacaciones;
     }
 
@@ -502,6 +576,30 @@ public class LoginController implements Serializable {
 
     public void setSelectedVacacion(VacacionesTO selectedVacacion) {
         this.selectedVacacion = selectedVacacion;
+    }
+
+    public UsuarioTO getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UsuarioTO userInfo) {
+        this.userInfo = userInfo;
+    }
+
+    public long getDiasConcedidos() {
+        return diasConcedidos;
+    }
+
+    public void setDiasConcedidos(long diasConcedidos) {
+        this.diasConcedidos = diasConcedidos;
+    }
+
+    public LocalDate getTomorrow() {
+        return tomorrow;
+    }
+
+    public void setTomorrow(LocalDate tomorrow) {
+        this.tomorrow = tomorrow;
     }
 
 }

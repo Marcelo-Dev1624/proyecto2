@@ -9,8 +9,7 @@
     </h:head>
     <h:body>
         <h1> Documentos</h1>
-      <div class="card">
-
+        <div class="card">
             <p:tabMenu activeIndex="#{param.i}">
                 <p:menuitem value="Usuarios" outcome="usuarios" icon="pi pi-fw pi-calendar">
                     <f:param name="i" value="0"/>
@@ -18,38 +17,54 @@
                 <p:menuitem value="Permisos" outcome="permisos" update="permiso" icon="pi pi-fw pi-pencil">
                     <f:param name="i" value="1"/>
                 </p:menuitem>
+<<<<<<< HEAD
                 <p:menuitem value="Proyectos" outcome="proyectos" update="proyectos" icon="pi pi-sun">
                     <f:param name="i" value="2"/>
                 </p:menuitem> 
                 <p:menuitem value="Actividades" outcome="actividades" update="actividades" icon="pi pi-sun">
+=======
+                <p:menuitem value="Permisos" outcome="permisos" update="permiso" icon="pi pi-fw pi-pencil">
+                    <f:param name="i" value="2"/>
+                </p:menuitem>
+                <p:menuitem value="Documentos" outcome="Documentos" update="Documentos" icon="pi pi-file-pdf">
+>>>>>>> Roberto
                     <f:param name="i" value="3"/>
                 </p:menuitem> 
-                <p:menuitem value="Documentos" outcome="Documentos" update="Documentos" icon="pi pi-file-pdf">
+                <p:menuitem value="Perfil" outcome="perfil" update="perfil" icon="pi pi-user">
                     <f:param name="i" value="4"/>
                 </p:menuitem> 
-                <p:menuitem value="Perfil" outcome="perfil" update="perfil" icon="pi pi-user">
+                <p:menuitem value="Gestionar vacaciones" outcome="gestionVacaciones" update="gestionVacaciones" icon="pi pi-sun">
                     <f:param name="i" value="5"/>
                 </p:menuitem> 
-                <p:menuitem value="Gestionar vacaciones" outcome="gestionVacaciones" update="gestionVacaciones" icon="pi pi-sun">
-                    <f:param name="i" value="6"/>
-                </p:menuitem> 
-
             </p:tabMenu>
-
         </div>
-        <br/>
         
        <div class="card">
     <h:form>
+        <p:panel header="Seleccione una categoria" style="margin-bottom:10px;">
+            <p:selectOneButton value="#{documentosController.categoriaDoc}">
+            <f:selectItem itemLabel="Certificaciones" itemValue="1"/>
+            <f:selectItem itemLabel="Titulos" itemValue="2"/>
+            <f:selectItem itemLabel="Curriculum" itemValue="3"/>
+            <f:selectItem itemLabel="Cartas" itemValue="4"/>
+        </p:selectOneButton>
+            <div class="card">
+            <p:commandButton value="Seleccionar" icon="pi pi-plus" actionListener="#{documentosController.selectCategoria}"
+                             styleClass="ui-button-success" style="margin-top: 15px">
+            </p:commandButton>
+                </div>
+        </p:panel>    
+            
         <p:growl id="messages" showDetail="true"/>
 
         <p:fileUpload mode="advanced"
                       multiple="false"
-                      sizeLimit="1024000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                      sizeLimit="1024000" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
                       invalidSizeMessage="Maximum file size allowed is 100 KB"
-                      invalidFileMessage="only gif | jpg | jpeg | png is allowed"
+                      invalidFileMessage="only gif | jpg | jpeg | png | pdf is allowed"
                       update="messages cropperPanel"
-                      listener="#{documentosController.handleFileUpload}"/>
+                      listener="#{documentosController.handleFileUpload}"
+                      />
 
         <p:outputPanel id="cropperPanel">
 
@@ -84,4 +99,3 @@
         
     </h:body>
 </html>
-
